@@ -1,19 +1,51 @@
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="p-2">header</header>
-      <main className="flex-1">
-        <div>
-          <p>notes</p>
+      <header className="flex items-center h-14 p-2">
+        <span className="text-xl/4">uryonote</span>
+      </header>
+      <main className="flex-1 flex">
+        <div className="min-w-32 p-2">
+          <ul className="list-disc list-inside">
+            <li>
+              notes
+              <ul className="ps-5 list-disc list-inside">
+                <li>sections</li>
+                <li>sections</li>
+                <li>sections</li>
+              </ul>
+            </li>
+            <li>
+              notes
+              <ul className="ps-5 list-disc list-inside">
+                <li>sections</li>
+                <li>sections</li>
+                <li>sections</li>
+              </ul>
+            </li>
+            <li>
+              notes
+              <ul className="ps-5 list-disc list-inside">
+                <li>sections</li>
+                <li>sections</li>
+                <li>sections</li>
+              </ul>
+            </li>
+          </ul>
         </div>
-        <div>
-          <p>section</p>
+        <div className="min-w-32 p-2">
+          <ul className="list-disc list-inside">
+            <li>pages</li>
+            <li>pages</li>
+            <li>pages</li>
+            <li>pages</li>
+            <li>pages</li>
+            <li>pages</li>
+          </ul>
         </div>
-        <div>
-          <p>pages</p>
-        </div>
-        <div>
-          <p>content</p>
+        <div className="flex-1 flex flex-col p-2">
+          <input type="text" placeholder="タイトル"></input>
+          <textarea className="flex-1 mt-2" placeholder="内容"></textarea>
         </div>
       </main>
     </div>

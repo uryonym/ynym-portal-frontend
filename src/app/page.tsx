@@ -44,7 +44,16 @@ export default function Home() {
           </ul>
         </div>
         <div className="flex-1 flex flex-col p-2">
-          <input type="text" placeholder="タイトル"></input>
+          <div className="flex">
+            <input
+              type="text"
+              className="flex-1"
+              placeholder="タイトル"
+            ></input>
+            <button type="button" className="ms-2 p-2 border border-gray-500">
+              保存
+            </button>
+          </div>
           <textarea className="flex-1 mt-2" placeholder="内容"></textarea>
         </div>
       </main>

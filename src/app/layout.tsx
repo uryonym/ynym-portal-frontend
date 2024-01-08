@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import '@mantine/core/styles.css'
+import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 
 export const metadata: Metadata = {
-  title: 'Ynym Portal',
-  description: 'Portal Site for Ynym family',
+  title: 'uryonote',
+  description: 'markdown editor',
 }
 
 export default function RootLayout({
@@ -13,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body>
+        <MantineProvider>{children}</MantineProvider>
+      </body>
     </html>
   )
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import NoteSectionList from '@/components/NoteSectionList'
 import PageEditor from '@/components/PageEditor'
 import PageList from '@/components/PageList'
 import { Drawer } from '@mantine/core'
@@ -23,11 +22,8 @@ export default function Home() {
           />
         </button>
       </header>
-      <Drawer opened={opened} onClose={close}>
-        <div className="flex">
-          <NoteSectionList />
-          <PageList />
-        </div>
+      <Drawer opened={opened} onClose={close} size="100%">
+        <PageList />
       </Drawer>
       <main className="flex-1 flex">
         <PageEditor />

@@ -10,7 +10,9 @@ export default function PageModal() {
         <p>ページ作成フォーム</p>
       </Modal>
 
-      <Button onClick={open}>ページを作成</Button>
+      <Button variant="filled" onClick={open}>
+        ページを作成
+      </Button>
     </div>
   )
 }

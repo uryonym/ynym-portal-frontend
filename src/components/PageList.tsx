@@ -1,4 +1,4 @@
-import { Button, Select, Stack } from '@mantine/core'
+import { Select, Stack } from '@mantine/core'
 import NoteModal from './NoteModal'
 import SectionModal from './SectionModal'
 import PageModal from './PageModal'

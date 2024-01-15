@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
-import '@mantine/core/styles.css'
 import './globals.css'
-import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 
 export const metadata: Metadata = {
   title: 'uryonote',
@@ -15,12 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <head>
-        <ColorSchemeScript />
-      </head>
-      <body>
-        <MantineProvider>{children}</MantineProvider>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

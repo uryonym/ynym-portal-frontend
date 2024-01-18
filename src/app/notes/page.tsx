@@ -31,8 +31,8 @@ const Notes = () => {
   return (
     <main className="flex-1 overflow-y-auto py-4">
       {notes.map((note, index) => (
-        <div className="py-3 text-center">
-          <p key={index}>{note.name}</p>
+        <div className="py-3 text-center" key={index}>
+          <p>{note.name}</p>
         </div>
       ))}
     </main>

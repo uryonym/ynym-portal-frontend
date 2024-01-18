@@ -10,35 +10,39 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
     <div
       className={`${
         isShow ? '' : 'hidden'
-      } absolute top-0 left-0 h-screen w-screen p-4 bg-white overflow-y-auto`}
+      } absolute top-0 left-0 h-screen w-screen bg-white`}
     >
-      <div className="text-right">
-        <button type="button" onClick={onClose}>
-          Ｘ
-        </button>
+      <div className="fixed h-10 w-full bg-white p-4">
+        <div className="text-right">
+          <button type="button" onClick={onClose}>
+            Ｘ
+          </button>
+        </div>
       </div>
-      <ul className="list-disc list-inside">
-        <Section />
-        <Section />
-        <Section />
-        <Section />
-        <Section />
-        <Section />
-      </ul>
+      <div className="mt-10 p-4">
+        <ul className="list-disc list-inside">
+          <Section />
+          <Section />
+          <Section />
+          <Section />
+          <Section />
+          <Section />
+        </ul>
+      </div>
     </div>
   )
 }
 
 function Section() {
   return (
-    <li>
+    <li className="pt-2">
       sections
       <ul className="ps-5 list-disc list-inside">
-        <li>pages</li>
-        <li>pages</li>
-        <li>pages</li>
-        <li>pages</li>
-        <li>pages</li>
+        <li className="py-2">pages</li>
+        <li className="py-2">pages</li>
+        <li className="py-2">pages</li>
+        <li className="py-2">pages</li>
+        <li className="py-2">pages</li>
       </ul>
     </li>
   )

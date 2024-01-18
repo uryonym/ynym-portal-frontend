@@ -9,9 +9,11 @@ const Home = () => {
   const [isShowDrawer, setShowDrawer] = useState(false)
 
   return (
-    <div className="flex h-screen flex-col">
-      <header className="flex items-center justify-between h-14 px-4">
-        <span className="text-xl/4 font-semibold">uryonote</span>
+    <>
+      <main className="flex-1 flex">
+        <PageEditor />
+      </main>
+      <footer className="flex justify-end items-center h-14 px-4">
         <button type="button" onClick={() => setShowDrawer(true)}>
           <Image
             src="hamburger-menu.svg"
@@ -20,15 +22,12 @@ const Home = () => {
             alt="メニュー"
           />
         </button>
-        <PageListDrawer
-          isShow={isShowDrawer}
-          onClose={() => setShowDrawer(false)}
-        />
-      </header>
-      <main className="flex-1 flex">
-        <PageEditor />
-      </main>
-    </div>
+      </footer>
+      <PageListDrawer
+        isShow={isShowDrawer}
+        onClose={() => setShowDrawer(false)}
+      />
+    </>
   )
 }
 

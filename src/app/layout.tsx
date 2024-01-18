@@ -13,7 +13,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <div className="flex h-screen flex-col">
+          <header className="flex items-center justify-between h-8 px-4">
+            <span className="text-lg font-semibold">uryonote</span>
+          </header>
+          {children}
+        </div>
+      </body>
     </html>
   )
 }

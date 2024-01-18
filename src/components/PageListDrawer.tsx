@@ -12,14 +12,7 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
         isShow ? '' : 'hidden'
       } absolute top-0 left-0 h-screen w-screen bg-white`}
     >
-      <div className="fixed h-10 w-full bg-white p-4">
-        <div className="text-right">
-          <button type="button" onClick={onClose}>
-            Ｘ
-          </button>
-        </div>
-      </div>
-      <div className="mt-10 p-4">
+      <div className="p-4">
         <ul className="list-disc list-inside">
           <Section />
           <Section />
@@ -28,6 +21,13 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
           <Section />
           <Section />
         </ul>
+      </div>
+      <div className="fixed bottom-0 h-14 w-full bg-white">
+        <div className="flex justify-end items-center h-full px-4">
+          <button type="button" onClick={onClose}>
+            Ｘ
+          </button>
+        </div>
       </div>
     </div>
   )

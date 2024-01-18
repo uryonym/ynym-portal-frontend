@@ -13,9 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>
+      <body className="text-black bg-white">
         <div className="flex h-screen flex-col">
-          <header className="flex items-center justify-between h-8 px-4">
+          <header className="flex items-center justify-between h-8 px-4 bg-amber-300">
             <span className="text-lg font-semibold">uryonote</span>
           </header>
           {children}

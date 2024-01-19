@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import BottomNavBar from './ui/BottomNavBar'
 
 type PageListDrawerProps = {
   isShow: Boolean
@@ -22,13 +23,12 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
           <Section />
         </ul>
       </div>
-      <div className="fixed bottom-0 h-14 w-full bg-white">
-        <div className="flex justify-end items-center h-full px-4">
-          <button type="button" onClick={onClose}>
-            Ｘ
-          </button>
-        </div>
-      </div>
+      <BottomNavBar>
+        <div></div>
+        <button type="button" onClick={onClose}>
+          Ｘ
+        </button>
+      </BottomNavBar>
     </div>
   )
 }

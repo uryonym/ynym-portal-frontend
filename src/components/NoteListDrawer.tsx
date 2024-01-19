@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import BottomNavBar from './ui/BottomNavBar'
 import useSWR from 'swr'
-import { createNote, fetcher } from '@/api'
+import { createNote, fetcher } from '@/app/api'
 
 type NoteListDrawerProps = {
   isShow: Boolean

@@ -13,7 +13,7 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
       } absolute top-0 left-0 h-screen w-screen bg-white`}
     >
       <div className="p-4">
-        <ul className="list-disc list-inside">
+        <ul className="list-disc list-inside mb-14">
           <Section />
           <Section />
           <Section />

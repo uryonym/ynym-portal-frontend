@@ -19,7 +19,7 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
 
   const onClickCreateNote = () => {
     setShowCreate(false)
-    createNote('notes', noteName)
+    createNote('/api/notes', noteName)
   }
 
   return (

@@ -12,7 +12,7 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
   const [isShowCreate, setShowCreate] = useState(false)
   const [noteName, setNoteName] = useState('')
 
-  const { data, isLoading } = useSWR('notes', fetcher)
+  const { data, isLoading } = useSWR('/api/notes', fetcher)
 
   if (isLoading) return <div>Loading...</div>
   if (!data) throw new Error()

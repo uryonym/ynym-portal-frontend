@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://api-portal.uryonym.com/api/v1/:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

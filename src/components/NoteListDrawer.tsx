@@ -1,7 +1,6 @@
 import { FC, useState } from 'react'
 import BottomNavBar from './ui/BottomNavBar'
-import useSWR from 'swr'
-import { createNote, fetcher } from '@/app/api'
+import { useNotes } from '@/hooks/useNotes'
 
 type NoteListDrawerProps = {
   isShow: Boolean
@@ -12,15 +11,16 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
   const [isShowCreate, setShowCreate] = useState(false)
   const [noteName, setNoteName] = useState('')
 
-  const { data, isLoading } = useSWR('/api/notes', fetcher)
-
-  if (isLoading) return <div>Loading...</div>
-  if (!data) throw new Error()
+  const { data, error, isLoading, createNote } = useNotes()
 
   const onClickCreateNote = () => {
     setShowCreate(false)
-    createNote('/api/notes', noteName)
+    createNote(noteName)
   }
+
+  if (error) return <div>{error.message}</div>
+  if (isLoading) return <div>Loading...</div>
+  if (!data) throw new Error()
 
   return (
     <div
@@ -29,8 +29,8 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
       } absolute top-0 left-0 h-screen w-screen bg-white`}
     >
       <div className="p-4">
-        {data.map((note: any, index: number) => (
-          <div className="py-3 text-center" key={index}>
+        {data.map((note) => (
+          <div className="py-3 text-center" key={note.seq}>
             <p>{note.name}</p>
           </div>
         ))}

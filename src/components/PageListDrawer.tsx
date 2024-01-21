@@ -26,7 +26,7 @@ const PageListDrawer: FC<PageListDrawerProps> = ({ isShow, onClose }) => {
       <BottomNavBar>
         <div></div>
         <button type="button" onClick={onClose}>
-          Ｘ
+          ✕
         </button>
       </BottomNavBar>
     </div>

@@ -11,7 +11,7 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
   const [isShowCreate, setShowCreate] = useState(false)
   const [noteName, setNoteName] = useState('')
 
-  const { data, error, isLoading, createNote } = useNotes()
+  const { data, error, isLoading, createNote, removeNote } = useNotes()
 
   const onClickCreateNote = () => {
     setShowCreate(false)
@@ -28,10 +28,13 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
         isShow ? '' : 'hidden'
       } absolute top-0 left-0 h-screen w-screen bg-white`}
     >
-      <div className="p-4">
+      <div className="py-4 px-8">
         {data.map((note) => (
-          <div className="py-3 text-center" key={note.seq}>
+          <div className="flex justify-between py-3 border-b" key={note.seq}>
             <p>{note.name}</p>
+            <button type="button" onClick={() => removeNote(note)}>
+              ✕
+            </button>
           </div>
         ))}
       </div>
@@ -40,7 +43,7 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
           ＋新規作成
         </button>
         <button type="button" onClick={onClose}>
-          Ｘ
+          ✕
         </button>
       </BottomNavBar>
       <div

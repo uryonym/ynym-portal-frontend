@@ -1,6 +1,8 @@
 import { FC, useState } from 'react'
 import BottomNavBar from './ui/BottomNavBar'
-import { useNotes } from '@/hooks/useNotes'
+import { Note, useNotes } from '@/hooks/useNotes'
+import { faPen, faXmark } from '@fortawesome/free-solid-svg-icons'
+import IconButton from './ui/IconButton'
 
 type NoteListDrawerProps = {
   isShow: Boolean
@@ -8,14 +10,34 @@ type NoteListDrawerProps = {
 }
 
 const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
-  const [isShowCreate, setShowCreate] = useState(false)
-  const [noteName, setNoteName] = useState('')
+  const [isShowNoteForm, setShowNoteForm] = useState<boolean>(false)
+  const [noteName, setNoteName] = useState<string>('')
+  const [currentNote, setCurrentNote] = useState<Note | undefined>()
 
-  const { data, error, isLoading, createNote, removeNote } = useNotes()
+  const { data, error, isLoading, createNote, updateNote, removeNote } =
+    useNotes()
 
-  const onClickCreateNote = () => {
-    setShowCreate(false)
-    createNote(noteName)
+  const onClickNewEditButton = (note: Note | undefined) => {
+    if (note) {
+      setNoteName(note.name)
+      setCurrentNote(note)
+    }
+    setShowNoteForm(true)
+  }
+
+  const onCloseNoteForm = () => {
+    setNoteName('')
+    setCurrentNote(undefined)
+    setShowNoteForm(false)
+  }
+
+  const onClickCreateUpdateNote = () => {
+    if (currentNote) {
+      updateNote(currentNote, noteName)
+    } else {
+      createNote(noteName)
+    }
+    onCloseNoteForm()
   }
 
   if (error) return <div>{error.message}</div>
@@ -32,14 +54,18 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
         {data.map((note) => (
           <div className="flex justify-between py-3 border-b" key={note.seq}>
             <p>{note.name}</p>
-            <button type="button" onClick={() => removeNote(note)}>
-              ✕
-            </button>
+            <div>
+              <IconButton
+                icon={faPen}
+                onClick={() => onClickNewEditButton(note)}
+              />
+              <IconButton icon={faXmark} onClick={() => removeNote(note)} />
+            </div>
           </div>
         ))}
       </div>
       <BottomNavBar>
-        <button type="button" onClick={() => setShowCreate(true)}>
+        <button type="button" onClick={() => onClickNewEditButton(undefined)}>
           ＋新規作成
         </button>
         <button type="button" onClick={onClose}>
@@ -48,12 +74,12 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
       </BottomNavBar>
       <div
         className={`${
-          isShowCreate ? '' : 'hidden'
+          isShowNoteForm ? '' : 'hidden'
         } absolute top-0 left-0 h-screen w-screen`}
       >
         <div
           className="h-full w-full bg-black opacity-50"
-          onClick={() => setShowCreate(false)}
+          onClick={onCloseNoteForm}
         />
         <div className="absolute bottom-0 left-0 h-1/3 w-full p-4 bg-white">
           <div className="flex">
@@ -67,9 +93,9 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
             <button
               type="button"
               className="ms-2 p-2 border border-gray-500"
-              onClick={onClickCreateNote}
+              onClick={onClickCreateUpdateNote}
             >
-              Create
+              {currentNote ? '更新' : '作成'}
             </button>
           </div>
         </div>

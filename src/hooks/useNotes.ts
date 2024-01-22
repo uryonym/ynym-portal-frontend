@@ -23,12 +23,19 @@ export const useNotes = () => {
     mutate()
   }
 
-  const removeNote = async (note: Note) => {
-    if (note.id) {
-      await axios.delete(`/api/notes/${note.id}`)
-      mutate()
+  const updateNote = async (note: Note, name: string) => {
+    const updateData: Note = {
+      id: note.id,
+      name: name,
     }
+    await axios.patch(`/api/notes/${note.id}`, updateData)
+    mutate()
   }
 
-  return { data, error, isLoading, createNote, removeNote }
+  const removeNote = async (note: Note) => {
+    await axios.delete(`/api/notes/${note.id}`)
+    mutate()
+  }
+
+  return { data, error, isLoading, createNote, updateNote, removeNote }
 }

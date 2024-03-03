@@ -3,6 +3,7 @@ import BottomNavBar from './ui/BottomNavBar'
 import { Note, useNotes } from '@/hooks/useNotes'
 import { faPen, faXmark } from '@fortawesome/free-solid-svg-icons'
 import IconButton from './ui/IconButton'
+import { useSections } from '@/hooks/useSections'
 
 type NoteListDrawerProps = {
   isShow: Boolean
@@ -14,8 +15,8 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
   const [noteName, setNoteName] = useState<string>('')
   const [currentNote, setCurrentNote] = useState<Note | undefined>()
 
-  const { data, error, isLoading, createNote, updateNote, removeNote } =
-    useNotes()
+  const note = useNotes()
+  const section = useSections(currentNote?.id)
 
   const onClickNewEditButton = (note: Note | undefined) => {
     if (note) {
@@ -53,7 +54,7 @@ const NoteListDrawer: FC<NoteListDrawerProps> = ({ isShow, onClose }) => {
       <div className="py-4 px-8">
         {data.map((note) => (
           <div className="flex justify-between py-3 border-b" key={note.seq}>
-            <p>{note.name}</p>
+            <div onClick={}>{note.name}</div>
             <div>
               <IconButton
                 icon={faPen}

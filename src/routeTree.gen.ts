@@ -12,12 +12,18 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TaskImport } from './routes/task'
+import { Route as SigninImport } from './routes/signin'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
 const TaskRoute = TaskImport.update({
   path: '/task',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SigninRoute = SigninImport.update({
+  path: '/signin',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -37,6 +43,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninImport
+      parentRoute: typeof rootRoute
+    }
     '/task': {
       id: '/task'
       path: '/task'
@@ -49,7 +62,11 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, TaskRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  SigninRoute,
+  TaskRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -60,11 +77,15 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, TaskRoute })
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/signin",
         "/task"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/signin": {
+      "filePath": "signin.tsx"
     },
     "/task": {
       "filePath": "task.tsx"

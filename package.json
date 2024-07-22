@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.51.11",
     "@tanstack/react-router": "^1.45.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.51.12",
     "@tanstack/router-devtools": "^1.45.7",
     "@tanstack/router-vite-plugin": "^1.45.7",
     "@types/react": "^18.3.3",

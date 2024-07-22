@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className='p-2'>
+    <div>
       <h3>Welcome Home!</h3>
       <button type='button' onClick={async () => console.log(await supabase.auth.getSession())}>
         サインイン状態の確認

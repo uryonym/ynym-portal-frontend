@@ -6,7 +6,7 @@ export const Route = createFileRoute('/task')({
 
 function Task() {
   return (
-    <div className='p-2'>
+    <div>
       <h3>Welcome Task!</h3>
     </div>
   )

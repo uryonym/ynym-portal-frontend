@@ -1,7 +1,7 @@
-import { Button, Modal, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label, Modal, TextInput } from 'flowbite-react'
 import { Task } from '../models/Task'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createTask, updateTask } from '../api/taskApi'
+import { createTask, formatDate, updateTask } from '../api/taskApi'
 import { FormEventHandler } from 'react'
 
 interface TaskModalProps {
@@ -32,12 +32,13 @@ export default function TaskModal({ show, onClose, task }: TaskModalProps) {
     const title = form.get('title') as string
     const description = (form.get('description') as string) || undefined
     const deadLine = new Date(form.get('deadLine') as string) || undefined
+    const isComplete = (form.get('isComplete') as string) === 'on'
 
     if (task?.id) {
-      const updateTask: Task = { ...task, title, description, deadLine }
+      const updateTask: Task = { ...task, title, description, deadLine, isComplete }
       updateMutation.mutate(updateTask)
     } else {
-      const newTask: Task = { title, description, deadLine, isComplete: false }
+      const newTask: Task = { title, description, deadLine, isComplete }
       createMutation.mutate(newTask)
     }
 
@@ -59,7 +60,11 @@ export default function TaskModal({ show, onClose, task }: TaskModalProps) {
           </div>
           <div className='mb-2'>
             <label>期日</label>
-            <TextInput type='date' name='deadLine' defaultValue={task?.deadLine?.toDateString()} />
+            <TextInput type='date' name='deadLine' defaultValue={formatDate(task?.deadLine)} />
+          </div>
+          <div className='mb-2 flex items-center gap-2'>
+            <Checkbox id='isComplete' name='isComplete' defaultChecked={task?.isComplete} />
+            <Label htmlFor='isComplete'>完了</Label>
           </div>
           <Button type='submit'>登録</Button>
         </form>

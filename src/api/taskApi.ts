@@ -29,7 +29,7 @@ export const createTask = async (task: Task) => {
   const response = await fetch(`${BASE_API_URL}/tasks`, {
     method: 'POST',
     headers,
-    body: JSON.stringify(task),
+    body: JSON.stringify({ ...task, deadLine: formatDate(task.deadLine) }),
   })
 
   if (!response.ok) {
@@ -42,7 +42,7 @@ export const updateTask = async (task: Task) => {
   const response = await fetch(`${BASE_API_URL}/tasks/${task.id}`, {
     method: 'PATCH',
     headers,
-    body: JSON.stringify(task),
+    body: JSON.stringify({ ...task, deadLine: formatDate(task.deadLine) }),
   })
 
   if (!response.ok) {
@@ -71,4 +71,13 @@ const tokenHeaders = async (): Promise<HeadersInit> => {
   }
 
   return headers
+}
+
+export const formatDate = (date: Date | undefined) => {
+  if (date) {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
 }

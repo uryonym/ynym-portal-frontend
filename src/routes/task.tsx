@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Table } from 'flowbite-react'
+import { Button, Checkbox, Table } from 'flowbite-react'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { deleteTask, getTasks } from '../api/taskApi'
@@ -50,6 +50,7 @@ function Task() {
       <Button onClick={handleClickCreate}>新規作成</Button>
       <Table>
         <Table.Head>
+          <Table.HeadCell>完了</Table.HeadCell>
           <Table.HeadCell>タスク</Table.HeadCell>
           <Table.HeadCell>詳細</Table.HeadCell>
           <Table.HeadCell>期日</Table.HeadCell>
@@ -64,9 +65,12 @@ function Task() {
           {data &&
             data.map((task) => (
               <Table.Row key={task.id}>
+                <Table.Cell>
+                  <Checkbox checked={task.isComplete} disabled />
+                </Table.Cell>
                 <Table.Cell>{task.title}</Table.Cell>
                 <Table.Cell>{task.description}</Table.Cell>
-                <Table.Cell>{task.deadLine?.toDateString()}</Table.Cell>
+                <Table.Cell>{task.deadLine?.toLocaleDateString('ja-JP')}</Table.Cell>
                 <Table.Cell>
                   <button className='font-medium text-cyan-600 hover:underline' onClick={() => handleClickEdit(task)}>
                     編集

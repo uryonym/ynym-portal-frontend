@@ -37,6 +37,31 @@ export const createTask = async (task: Task) => {
   }
 }
 
+export const updateTask = async (task: Task) => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/tasks/${task.id}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(task),
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+}
+
+export const deleteTask = async (id: string) => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/tasks/${id}`, {
+    method: 'DELETE',
+    headers,
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+}
+
 const tokenHeaders = async (): Promise<HeadersInit> => {
   const { data } = await supabase.auth.getSession()
 

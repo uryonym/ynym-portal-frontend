@@ -1,9 +1,10 @@
-import { FormEventHandler } from 'react'
-import { Button, Table, TextInput } from 'flowbite-react'
+import { useState } from 'react'
+import { Button, Table } from 'flowbite-react'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { createTask, getTasks } from '../api/taskApi'
+import { deleteTask, getTasks } from '../api/taskApi'
 import { type Task } from '../models/Task'
+import TaskModal from '../components/TaskModal'
 
 export const Route = createFileRoute('/task')({
   component: Task,
@@ -12,27 +13,41 @@ export const Route = createFileRoute('/task')({
 function Task() {
   const queryClient = useQueryClient()
   const { data } = useSuspenseQuery({ queryKey: ['tasks'], queryFn: getTasks })
-  const addMutation = useMutation({
-    mutationFn: createTask,
+  const deleteMutation = useMutation({
+    mutationFn: deleteTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] })
     },
   })
 
-  const handleCreate: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault()
+  const [openModal, setOpenModal] = useState(false)
+  const [currentTask, setCurrentTask] = useState<Task>()
 
-    const form = new FormData(event.currentTarget)
-    const title = form.get('title') as string
-    const description = (form.get('description') as string) || undefined
-    const deadLine = new Date(form.get('deadLine') as string) || undefined
+  // 新規作成ボタンクリック時
+  const handleClickCreate = () => {
+    setCurrentTask(undefined)
+    setOpenModal(true)
+  }
 
-    const newTask: Task = { title, description, deadLine, isComplete: false }
-    addMutation.mutate(newTask)
+  // 編集ボタンクリック時
+  const handleClickEdit = (task: Task) => {
+    setCurrentTask(task)
+    setOpenModal(true)
+  }
+
+  // 削除ボタンクリック時
+  const handleClickDelete = (id: string) => {
+    deleteMutation.mutate(id)
+  }
+
+  const handleCloseModal = () => {
+    setCurrentTask(undefined)
+    setOpenModal(false)
   }
 
   return (
     <div className='p-2'>
+      <Button onClick={handleClickCreate}>新規作成</Button>
       <Table>
         <Table.Head>
           <Table.HeadCell>タスク</Table.HeadCell>
@@ -53,40 +68,23 @@ function Task() {
                 <Table.Cell>{task.description}</Table.Cell>
                 <Table.Cell>{task.deadLine?.toDateString()}</Table.Cell>
                 <Table.Cell>
-                  <a className='font-medium text-cyan-600 hover:underline' href='#'>
+                  <button className='font-medium text-cyan-600 hover:underline' onClick={() => handleClickEdit(task)}>
                     編集
-                  </a>
+                  </button>
                 </Table.Cell>
                 <Table.Cell>
-                  <a className='font-medium text-red-400 hover:underline' href='#'>
+                  <button
+                    className='font-medium text-red-400 hover:underline'
+                    onClick={() => handleClickDelete(task.id!)}
+                  >
                     削除
-                  </a>
+                  </button>
                 </Table.Cell>
               </Table.Row>
             ))}
         </Table.Body>
       </Table>
-      <form className='flex flex-col gap-3 max-w-md' onSubmit={handleCreate}>
-        <div>
-          <div className='mb-2 block'>
-            <label>タスク名</label>
-          </div>
-          <TextInput type='text' name='title' />
-        </div>
-        <div>
-          <div className='mb-2 block'>
-            <label>詳細</label>
-          </div>
-          <TextInput type='text' name='description' />
-        </div>
-        <div>
-          <div className='mb-2 block'>
-            <label>期日</label>
-          </div>
-          <TextInput type='date' name='deadLine' />
-        </div>
-        <Button type='submit'>登録</Button>
-      </form>
+      <TaskModal show={openModal} onClose={handleCloseModal} task={currentTask} />
     </div>
   )
 }

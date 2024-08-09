@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { supabase } from '../libs/supabase'
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -7,11 +6,9 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div>
-      <h3>Welcome Home!</h3>
-      <button type='button' onClick={async () => console.log(await supabase.auth.getSession())}>
-        サインイン状態の確認
-      </button>
+    <div className='flex-1 flex flex-col gap-6 justify-center items-center'>
+      <h3>トップページ</h3>
+      <p>メニューから見たいコンテンツを選択してください</p>
     </div>
   )
 }

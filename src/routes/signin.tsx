@@ -21,14 +21,26 @@ function SignIn() {
   }
 
   return (
-    <div>
-      <h3>Welcome Signin!</h3>
+    <div className='flex-1 flex flex-col gap-6 justify-center items-center'>
+      <p>サインインしてください</p>
       <form onSubmit={handleSignin}>
-        <input type='email' name='email' />
-        <input type='password' name='password' />
-        <button className='underline' type='submit'>
-          サインイン
-        </button>
+        <div className='mb-3'>
+          <div>
+            <label>メールアドレス</label>
+          </div>
+          <input type='email' name='email' />
+        </div>
+        <div className='mb-3'>
+          <div>
+            <label>パスワード</label>
+          </div>
+          <input type='password' name='password' />
+        </div>
+        <div>
+          <button className='underline' type='submit'>
+            サインイン
+          </button>
+        </div>
       </form>
     </div>
   )

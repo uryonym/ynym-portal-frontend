@@ -46,48 +46,52 @@ function Task() {
   }
 
   return (
-    <div className='p-2'>
-      <Button onClick={handleClickCreate}>新規作成</Button>
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>完了</Table.HeadCell>
-          <Table.HeadCell>タスク</Table.HeadCell>
-          <Table.HeadCell>詳細</Table.HeadCell>
-          <Table.HeadCell>期日</Table.HeadCell>
-          <Table.HeadCell>
+    <div className='flex-1 flex flex-col gap-3'>
+      <div>
+        <button className='underline' type='button' onClick={handleClickCreate}>
+          新規作成
+        </button>
+      </div>
+      <table>
+        <thead>
+          <th>完了</th>
+          <th>タスク</th>
+          <th>詳細</th>
+          <th>期日</th>
+          <th>
             <span className='sr-only'>編集</span>
-          </Table.HeadCell>
-          <Table.HeadCell>
+          </th>
+          <th>
             <span className='sr-only'>削除</span>
-          </Table.HeadCell>
-        </Table.Head>
-        <Table.Body className='divide-y'>
+          </th>
+        </thead>
+        <tbody className='divide-y'>
           {data &&
             data.map((task) => (
-              <Table.Row key={task.id}>
-                <Table.Cell>
+              <tr key={task.id}>
+                <td>
                   <Checkbox checked={task.isComplete} disabled />
-                </Table.Cell>
-                <Table.Cell>{task.title}</Table.Cell>
-                <Table.Cell>{task.description}</Table.Cell>
-                <Table.Cell>{task.deadLine?.toLocaleDateString('ja-JP')}</Table.Cell>
-                <Table.Cell>
+                </td>
+                <td>{task.title}</td>
+                <td>{task.description}</td>
+                <td>{task.deadLine?.toLocaleDateString('ja-JP')}</td>
+                <td>
                   <button className='font-medium text-cyan-600 hover:underline' onClick={() => handleClickEdit(task)}>
                     編集
                   </button>
-                </Table.Cell>
-                <Table.Cell>
+                </td>
+                <td>
                   <button
                     className='font-medium text-red-400 hover:underline'
                     onClick={() => handleClickDelete(task.id!)}
                   >
                     削除
                   </button>
-                </Table.Cell>
-              </Table.Row>
+                </td>
+              </tr>
             ))}
-        </Table.Body>
-      </Table>
+        </tbody>
+      </table>
       <TaskModal show={openModal} onClose={handleCloseModal} task={currentTask} />
     </div>
   )

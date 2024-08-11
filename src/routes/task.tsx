@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Checkbox, Table } from 'flowbite-react'
+import { Checkbox } from 'flowbite-react'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { deleteTask, getTasks } from '../api/taskApi'
@@ -13,13 +13,6 @@ export const Route = createFileRoute('/task')({
 function Task() {
   const queryClient = useQueryClient()
   const { data } = useSuspenseQuery({ queryKey: ['tasks'], queryFn: getTasks })
-  const deleteMutation = useMutation({
-    mutationFn: deleteTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
-  })
-
   const [openModal, setOpenModal] = useState(false)
   const [currentTask, setCurrentTask] = useState<Task>()
 
@@ -35,63 +28,32 @@ function Task() {
     setOpenModal(true)
   }
 
-  // 削除ボタンクリック時
-  const handleClickDelete = (id: string) => {
-    deleteMutation.mutate(id)
-  }
-
   const handleCloseModal = () => {
     setCurrentTask(undefined)
     setOpenModal(false)
   }
 
   return (
-    <div className='flex-1 flex flex-col gap-3'>
+    <div className='flex-1 flex flex-col gap-3 p-2'>
       <div>
         <button className='underline' type='button' onClick={handleClickCreate}>
           新規作成
         </button>
       </div>
-      <table>
-        <thead>
-          <th>完了</th>
-          <th>タスク</th>
-          <th>詳細</th>
-          <th>期日</th>
-          <th>
-            <span className='sr-only'>編集</span>
-          </th>
-          <th>
-            <span className='sr-only'>削除</span>
-          </th>
-        </thead>
-        <tbody className='divide-y'>
-          {data &&
-            data.map((task) => (
-              <tr key={task.id}>
-                <td>
-                  <Checkbox checked={task.isComplete} disabled />
-                </td>
-                <td>{task.title}</td>
-                <td>{task.description}</td>
-                <td>{task.deadLine?.toLocaleDateString('ja-JP')}</td>
-                <td>
-                  <button className='font-medium text-cyan-600 hover:underline' onClick={() => handleClickEdit(task)}>
-                    編集
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className='font-medium text-red-400 hover:underline'
-                    onClick={() => handleClickDelete(task.id!)}
-                  >
-                    削除
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <ul>
+        {data &&
+          data.map((task) => (
+            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(task)}>
+              <div>
+                <input type='checkbox' checked={task.isComplete} />
+              </div>
+              <div>
+                <p>{task.title}</p>
+                <p className='text-sm'>{task.deadLine?.toLocaleDateString('ja-JP')}</p>
+              </div>
+            </li>
+          ))}
+      </ul>
       <TaskModal show={openModal} onClose={handleCloseModal} task={currentTask} />
     </div>
   )

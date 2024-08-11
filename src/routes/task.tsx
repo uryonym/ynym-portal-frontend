@@ -14,6 +14,12 @@ function Task() {
   const [openModal, setOpenModal] = useState(false)
   const [currentTask, setCurrentTask] = useState<Task>()
 
+  // 未完了のタスク
+  const incompleteTasks = data.filter((task) => !task.isComplete)
+
+  // 完了済のタスク
+  const completeTasks = data.filter((task) => task.isComplete)
+
   // 新規作成ボタンクリック時
   const handleClickCreate = () => {
     setCurrentTask(undefined)
@@ -39,8 +45,23 @@ function Task() {
         </button>
       </div>
       <ul>
-        {data &&
-          data.map((task) => (
+        {incompleteTasks &&
+          incompleteTasks.map((task) => (
+            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(task)}>
+              <div>
+                <input type='checkbox' checked={task.isComplete} />
+              </div>
+              <div>
+                <p>{task.title}</p>
+                <p className='text-sm'>{task.deadLine?.toLocaleDateString('ja-JP')}</p>
+              </div>
+            </li>
+          ))}
+      </ul>
+      <p>完了済タスク</p>
+      <ul>
+        {completeTasks &&
+          completeTasks.map((task) => (
             <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(task)}>
               <div>
                 <input type='checkbox' checked={task.isComplete} />

@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Checkbox } from 'flowbite-react'
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { deleteTask, getTasks } from '../api/taskApi'
+import { getTasks } from '../api/taskApi'
 import { type Task } from '../models/Task'
 import TaskModal from '../components/TaskModal'
 
@@ -11,7 +10,6 @@ export const Route = createFileRoute('/task')({
 })
 
 function Task() {
-  const queryClient = useQueryClient()
   const { data } = useSuspenseQuery({ queryKey: ['tasks'], queryFn: getTasks })
   const [openModal, setOpenModal] = useState(false)
   const [currentTask, setCurrentTask] = useState<Task>()

@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRootRoute, Outlet, redirect } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { supabase } from '../libs/supabase'
 import Header from '../components/Header'
+import { TanStackRouterDevtools } from '../components/TanStackRouterDevTools'
 
 const queryClient = new QueryClient()
 

@@ -22,6 +22,11 @@ export default function Header() {
           </Link>
         </li>
         <li>
+          <Link className='underline' to='/refueling'>
+            燃費記録
+          </Link>
+        </li>
+        <li>
           <Link className='underline' onClick={() => supabase.auth.signOut()}>
             サインアウト
           </Link>

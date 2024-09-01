@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TaskImport } from './routes/task'
 import { Route as SigninImport } from './routes/signin'
 import { Route as RefuelingImport } from './routes/refueling'
+import { Route as NoteImport } from './routes/note'
 import { Route as CarImport } from './routes/car'
 import { Route as IndexImport } from './routes/index'
 
@@ -31,6 +32,11 @@ const SigninRoute = SigninImport.update({
 
 const RefuelingRoute = RefuelingImport.update({
   path: '/refueling',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const NoteRoute = NoteImport.update({
+  path: '/note',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -62,6 +68,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CarImport
       parentRoute: typeof rootRoute
     }
+    '/note': {
+      id: '/note'
+      path: '/note'
+      fullPath: '/note'
+      preLoaderRoute: typeof NoteImport
+      parentRoute: typeof rootRoute
+    }
     '/refueling': {
       id: '/refueling'
       path: '/refueling'
@@ -91,6 +104,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   CarRoute,
+  NoteRoute,
   RefuelingRoute,
   SigninRoute,
   TaskRoute,
@@ -106,6 +120,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/car",
+        "/note",
         "/refueling",
         "/signin",
         "/task"
@@ -116,6 +131,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/car": {
       "filePath": "car.tsx"
+    },
+    "/note": {
+      "filePath": "note.tsx"
     },
     "/refueling": {
       "filePath": "refueling.tsx"

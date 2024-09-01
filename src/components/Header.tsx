@@ -22,6 +22,11 @@ export default function Header() {
           </Link>
         </li>
         <li>
+          <Link className='underline' to='/note'>
+            ノート
+          </Link>
+        </li>
+        <li>
           <Link className='underline' onClick={() => supabase.auth.signOut()}>
             サインアウト
           </Link>

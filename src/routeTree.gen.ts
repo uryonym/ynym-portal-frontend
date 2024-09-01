@@ -18,6 +18,7 @@ import { Route as CarImport } from './routes/car'
 import { Route as IndexImport } from './routes/index'
 import { Route as NoteIndexImport } from './routes/note/index'
 import { Route as NoteNoteIdImport } from './routes/note/$noteId'
+import { Route as NoteNoteIdSectionIdImport } from './routes/note_/$noteId/$sectionId'
 
 // Create/Update Routes
 
@@ -53,6 +54,11 @@ const NoteIndexRoute = NoteIndexImport.update({
 
 const NoteNoteIdRoute = NoteNoteIdImport.update({
   path: '/note/$noteId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const NoteNoteIdSectionIdRoute = NoteNoteIdSectionIdImport.update({
+  path: '/note/$noteId/$sectionId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoteIndexImport
       parentRoute: typeof rootRoute
     }
+    '/note/$noteId/$sectionId': {
+      id: '/note/$noteId/$sectionId'
+      path: '/note/$noteId/$sectionId'
+      fullPath: '/note/$noteId/$sectionId'
+      preLoaderRoute: typeof NoteNoteIdSectionIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -122,6 +135,7 @@ export const routeTree = rootRoute.addChildren({
   TaskRoute,
   NoteNoteIdRoute,
   NoteIndexRoute,
+  NoteNoteIdSectionIdRoute,
 })
 
 /* prettier-ignore-end */
@@ -138,7 +152,8 @@ export const routeTree = rootRoute.addChildren({
         "/signin",
         "/task",
         "/note/$noteId",
-        "/note/"
+        "/note/",
+        "/note/$noteId/$sectionId"
       ]
     },
     "/": {
@@ -161,6 +176,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/note/": {
       "filePath": "note/index.tsx"
+    },
+    "/note/$noteId/$sectionId": {
+      "filePath": "note_/$noteId/$sectionId.tsx"
     }
   }
 }

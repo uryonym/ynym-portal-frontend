@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { getSections } from '../../api/noteApi'
 import SectionModal from '../../components/SectionModal'
 import { useState } from 'react'
@@ -45,7 +45,7 @@ function Section() {
           data.map((section) => (
             <li className='flex gap-3 items-center p-2 border-b-2'>
               <div>
-                <p>{section.name}</p>
+                <p><Link to={`/note/${noteId}/${section.id}`}>{section.name}</Link></p>
                 <p>seq: {section.seq}</p>
                 <button className='underline' type="button" onClick={() => handleClickEdit(section)}>編集</button>
               </div>

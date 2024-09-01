@@ -2,6 +2,7 @@ import { BASE_API_URL } from '../libs/constants'
 import { supabase } from '../libs/supabase'
 import { Note } from '../models/Note'
 import { Section } from '../models/Section'
+import { Page } from '../models/Page'
 
 export const getNotes = async (): Promise<Note[]> => {
   const headers = await tokenHeaders()
@@ -45,6 +46,27 @@ export const getSections = async (noteId: string): Promise<Section[]> => {
   return data
 }
 
+export const getPages = async (params: { noteId: string, sectionId: string }): Promise<Page[]> => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/notes/${params.noteId}/sections/${params.sectionId}/pages`, {
+    method: 'GET',
+    headers,
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+
+  const rawData = await response.json()
+  const data: Page[] = rawData.map((page: any) => ({
+    ...page,
+    createdAt: new Date(page.createdAt),
+    updatedAt: new Date(page.updatedAt),
+  }))
+
+  return data
+}
+
 
 export const createNote = async (note: Note) => {
   const headers = await tokenHeaders()
@@ -72,6 +94,20 @@ export const createSection = async (params: { noteId: string, section: Section }
   }
 }
 
+export const createPage = async (params: { noteId: string, sectionId: string, page: Page }) => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/notes/${params.noteId}/sections/${params.sectionId}/pages`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(params.page),
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+}
+
+
 export const updateNote = async (note: Note) => {
   const headers = await tokenHeaders()
   const response = await fetch(`${BASE_API_URL}/notes/${note.id}`, {
@@ -98,6 +134,20 @@ export const updateSection = async (params: { noteId: string, section: Section }
   }
 }
 
+export const updatePage = async (params: { noteId: string, sectionId: string, page: Page }) => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/notes/${params.noteId}/sections/${params.sectionId}/pages/${params.page.id}`, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(params.page),
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+}
+
+
 export const deleteNote = async (id: string) => {
   const headers = await tokenHeaders()
   const response = await fetch(`${BASE_API_URL}/notes/${id}`, {
@@ -110,7 +160,7 @@ export const deleteNote = async (id: string) => {
   }
 }
 
-export const deleteSection = async (params: {noteId:string, id: string}) => {
+export const deleteSection = async (params: { noteId: string, id: string }) => {
   const headers = await tokenHeaders()
   const response = await fetch(`${BASE_API_URL}/notes/${params.noteId}/sections/${params.id}`, {
     method: 'DELETE',
@@ -122,6 +172,19 @@ export const deleteSection = async (params: {noteId:string, id: string}) => {
   }
 }
 
+export const deletePage = async (params: { noteId: string, sectionId: string, id: string }) => {
+  const headers = await tokenHeaders()
+  const response = await fetch(`${BASE_API_URL}/notes/${params.noteId}/sections/${params.sectionId}/pages/${params.id}`, {
+    method: 'DELETE',
+    headers,
+  })
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok.')
+  }
+}
+
+
 const tokenHeaders = async (): Promise<HeadersInit> => {
   const { data } = await supabase.auth.getSession()
 
@@ -131,13 +194,4 @@ const tokenHeaders = async (): Promise<HeadersInit> => {
   }
 
   return headers
-}
-
-export const formatDate = (date: Date | undefined) => {
-  if (date) {
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`
-  }
 }

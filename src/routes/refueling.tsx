@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { type Refueling } from '../models/Refueling'
 import RefuelingModal from '../components/RefuelingModal'
 import { getRefuelings } from '../api/refuelingApi'
@@ -41,6 +41,9 @@ function Refueling() {
 
   return (
     <div className='flex-1 flex flex-col gap-3 p-2'>
+      <div>
+        <Link className='underline' to='/car'>車両管理画面へ</Link>
+      </div>
       {currentCarId &&
         <div>
           <button className='underline' type='button' onClick={handleClickCreate}>

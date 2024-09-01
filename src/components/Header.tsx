@@ -17,11 +17,6 @@ export default function Header() {
           </Link>
         </li>
         <li>
-          <Link className='underline' to='/car'>
-            車両
-          </Link>
-        </li>
-        <li>
           <Link className='underline' to='/refueling'>
             燃費記録
           </Link>

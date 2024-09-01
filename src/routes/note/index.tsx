@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-import { type Note } from '../models/Note'
-import { getNotes } from '../api/noteApi'
-import NoteModal from '../components/NoteModal'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { type Note } from '../../models/Note'
+import { getNotes } from '../../api/noteApi'
+import NoteModal from '../../components/NoteModal'
 
-export const Route = createFileRoute('/note')({
+export const Route = createFileRoute('/note/')({
   component: Note,
 })
 
@@ -41,10 +41,11 @@ function Note() {
       <ul>
         {data &&
           data.map((note) => (
-            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(note)}>
+            <li className='flex gap-3 items-center p-2 border-b-2'>
               <div>
-                <p>{note.name}</p>
+                <p><Link to={`/note/${note.id}`}>{note.name}</Link></p>
                 <p>seq: {note.seq}</p>
+                <button className='underline' type="button" onClick={() => handleClickEdit(note)}>編集</button>
               </div>
             </li>
           ))}

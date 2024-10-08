@@ -47,9 +47,9 @@ function Task() {
       <ul>
         {incompleteTasks &&
           incompleteTasks.map((task) => (
-            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(task)}>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={task.id} onClick={() => handleClickEdit(task)}>
               <div>
-                <input type='checkbox' checked={task.isComplete} />
+                <input type='checkbox' defaultChecked={task.isComplete} />
               </div>
               <div>
                 <p>{task.title}</p>
@@ -62,9 +62,9 @@ function Task() {
       <ul>
         {completeTasks &&
           completeTasks.map((task) => (
-            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(task)}>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={task.id} onClick={() => handleClickEdit(task)}>
               <div>
-                <input type='checkbox' checked={task.isComplete} />
+                <input type='checkbox' defaultChecked={task.isComplete} />
               </div>
               <div>
                 <p>{task.title}</p>

@@ -127,16 +127,99 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  CarRoute,
-  RefuelingRoute,
-  SigninRoute,
-  TaskRoute,
-  NoteNoteIdRoute,
-  NoteIndexRoute,
-  NoteNoteIdSectionIdRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/car': typeof CarRoute
+  '/refueling': typeof RefuelingRoute
+  '/signin': typeof SigninRoute
+  '/task': typeof TaskRoute
+  '/note/$noteId': typeof NoteNoteIdRoute
+  '/note': typeof NoteIndexRoute
+  '/note/$noteId/$sectionId': typeof NoteNoteIdSectionIdRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/car': typeof CarRoute
+  '/refueling': typeof RefuelingRoute
+  '/signin': typeof SigninRoute
+  '/task': typeof TaskRoute
+  '/note/$noteId': typeof NoteNoteIdRoute
+  '/note': typeof NoteIndexRoute
+  '/note/$noteId/$sectionId': typeof NoteNoteIdSectionIdRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/car': typeof CarRoute
+  '/refueling': typeof RefuelingRoute
+  '/signin': typeof SigninRoute
+  '/task': typeof TaskRoute
+  '/note/$noteId': typeof NoteNoteIdRoute
+  '/note/': typeof NoteIndexRoute
+  '/note/$noteId/$sectionId': typeof NoteNoteIdSectionIdRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/car'
+    | '/refueling'
+    | '/signin'
+    | '/task'
+    | '/note/$noteId'
+    | '/note'
+    | '/note/$noteId/$sectionId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/car'
+    | '/refueling'
+    | '/signin'
+    | '/task'
+    | '/note/$noteId'
+    | '/note'
+    | '/note/$noteId/$sectionId'
+  id:
+    | '__root__'
+    | '/'
+    | '/car'
+    | '/refueling'
+    | '/signin'
+    | '/task'
+    | '/note/$noteId'
+    | '/note/'
+    | '/note/$noteId/$sectionId'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  CarRoute: typeof CarRoute
+  RefuelingRoute: typeof RefuelingRoute
+  SigninRoute: typeof SigninRoute
+  TaskRoute: typeof TaskRoute
+  NoteNoteIdRoute: typeof NoteNoteIdRoute
+  NoteIndexRoute: typeof NoteIndexRoute
+  NoteNoteIdSectionIdRoute: typeof NoteNoteIdSectionIdRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  CarRoute: CarRoute,
+  RefuelingRoute: RefuelingRoute,
+  SigninRoute: SigninRoute,
+  TaskRoute: TaskRoute,
+  NoteNoteIdRoute: NoteNoteIdRoute,
+  NoteIndexRoute: NoteIndexRoute,
+  NoteNoteIdSectionIdRoute: NoteNoteIdSectionIdRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

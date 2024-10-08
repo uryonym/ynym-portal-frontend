@@ -41,11 +41,15 @@ function Note() {
       <ul>
         {data &&
           data.map((note) => (
-            <li className='flex gap-3 items-center p-2 border-b-2'>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={note.id}>
               <div>
-                <p><Link to={`/note/${note.id}`}>{note.name}</Link></p>
+                <p>
+                  <Link to={`/note/${note.id}`}>{note.name}</Link>
+                </p>
                 <p>seq: {note.seq}</p>
-                <button className='underline' type="button" onClick={() => handleClickEdit(note)}>編集</button>
+                <button className='underline' type='button' onClick={() => handleClickEdit(note)}>
+                  編集
+                </button>
               </div>
             </li>
           ))}

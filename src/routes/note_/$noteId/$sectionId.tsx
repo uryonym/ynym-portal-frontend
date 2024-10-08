@@ -6,7 +6,7 @@ import { type Page } from '../../../models/Page'
 import PageModal from '../../../components/PageModal'
 
 export const Route = createFileRoute('/note/$noteId/$sectionId')({
-  component: Page
+  component: Page,
 })
 
 function Page() {
@@ -44,11 +44,13 @@ function Page() {
       <ul>
         {data &&
           data.map((page) => (
-            <li className='flex gap-3 items-center p-2 border-b-2'>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={page.id}>
               <div>
                 <p>{page.title}</p>
                 <p>seq: {page.seq}</p>
-                <button className='underline' type="button" onClick={() => handleClickEdit(page)}>編集</button>
+                <button className='underline' type='button' onClick={() => handleClickEdit(page)}>
+                  編集
+                </button>
               </div>
             </li>
           ))}

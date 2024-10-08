@@ -16,7 +16,10 @@ function Refueling() {
   const [currentRefueling, setCurrentRefueling] = useState<Refueling>()
 
   const { data: cars } = useSuspenseQuery({ queryKey: ['cars'], queryFn: getCars })
-  const { data: refuelings } = useQuery({ queryKey: ["refuelings", currentCarId], queryFn: () => getRefuelings(currentCarId) })
+  const { data: refuelings } = useQuery({
+    queryKey: ['refuelings', currentCarId],
+    queryFn: () => getRefuelings(currentCarId),
+  })
 
   // 新規作成ボタンクリック時
   const handleClickCreate = () => {
@@ -42,38 +45,50 @@ function Refueling() {
   return (
     <div className='flex-1 flex flex-col gap-3 p-2'>
       <div>
-        <Link className='underline' to='/car'>車両管理画面へ</Link>
+        <Link className='underline' to='/car'>
+          車両管理画面へ
+        </Link>
       </div>
-      {currentCarId &&
+      {currentCarId && (
         <div>
           <button className='underline' type='button' onClick={handleClickCreate}>
             新規作成
           </button>
         </div>
-      }
+      )}
       <div>
-        <select name="carId" onChange={handleSelectCar}>
-          <option value="">車を選択してください</option>
-          {cars && cars.map((car) => (
-            <option key={car.id} value={car.id}>{car.name}</option>
-          ))}
+        <select name='carId' onChange={handleSelectCar}>
+          <option value=''>車を選択してください</option>
+          {cars &&
+            cars.map((car) => (
+              <option key={car.id} value={car.id}>
+                {car.name}
+              </option>
+            ))}
         </select>
       </div>
       <ul>
         {refuelings &&
           refuelings.map((refueling) => (
-            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(refueling)}>
+            <li
+              className='flex gap-3 items-center p-2 border-b-2'
+              key={refueling.id}
+              onClick={() => handleClickEdit(refueling)}
+            >
               <div>
-                <p>{refueling.refuelDatetime.toLocaleDateString("ja-JP")}</p>
+                <p>{refueling.refuelDatetime.toLocaleDateString('ja-JP')}</p>
                 <p>{refueling.odometer} km</p>
-                <p>@¥{refueling.price}　¥{refueling.totalCost}　{Math.round(refueling.totalCost / refueling.price * 100) / 100} l</p>
+                <p>
+                  @¥{refueling.price}　¥{refueling.totalCost}　
+                  {Math.round((refueling.totalCost / refueling.price) * 100) / 100} l
+                </p>
               </div>
             </li>
           ))}
       </ul>
-      {currentCarId &&
+      {currentCarId && (
         <RefuelingModal show={openModal} onClose={handleCloseModal} carId={currentCarId} refueling={currentRefueling} />
-      }
+      )}
     </div>
   )
 }

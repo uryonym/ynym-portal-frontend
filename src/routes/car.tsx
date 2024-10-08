@@ -41,7 +41,7 @@ function Car() {
       <ul>
         {data &&
           data.map((car) => (
-            <li className='flex gap-3 items-center p-2 border-b-2' onClick={() => handleClickEdit(car)}>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={car.id} onClick={() => handleClickEdit(car)}>
               <div>
                 <p>{car.name}</p>
               </div>

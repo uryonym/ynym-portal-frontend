@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { type Section } from '../../models/Section'
 
 export const Route = createFileRoute('/note/$noteId')({
-  component: Section
+  component: Section,
 })
 
 function Section() {
@@ -43,11 +43,15 @@ function Section() {
       <ul>
         {data &&
           data.map((section) => (
-            <li className='flex gap-3 items-center p-2 border-b-2'>
+            <li className='flex gap-3 items-center p-2 border-b-2' key={section.id}>
               <div>
-                <p><Link to={`/note/${noteId}/${section.id}`}>{section.name}</Link></p>
+                <p>
+                  <Link to={`/note/${noteId}/${section.id}`}>{section.name}</Link>
+                </p>
                 <p>seq: {section.seq}</p>
-                <button className='underline' type="button" onClick={() => handleClickEdit(section)}>編集</button>
+                <button className='underline' type='button' onClick={() => handleClickEdit(section)}>
+                  編集
+                </button>
               </div>
             </li>
           ))}

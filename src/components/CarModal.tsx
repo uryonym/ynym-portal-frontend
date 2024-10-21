@@ -118,7 +118,7 @@ export default function CarModal({ show, onClose, car }: CarModalProps) {
               </div>
               <input className='w-full' type='text' name='tankCapacity' defaultValue={car?.tankCapacity} />
             </div>
-            <div className='flex justify-between'>
+            <div className='flex justify-between pt-3'>
               <button className='px-4 py-2 bg-blue-500 text-white rounded underline' type='submit'>
                 登録
               </button>

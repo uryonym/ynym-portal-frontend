@@ -92,11 +92,11 @@ export default function TaskModal({ show, onClose, task }: TaskModalProps) {
               </div>
               <input className='w-full' type='date' name='deadLine' defaultValue={formatDate(task?.deadLine)} />
             </div>
-            <div className='mb-2 py-3 flex items-center gap-2'>
+            <div className='mb-2 pt-2 flex items-center gap-2'>
               <input type='checkbox' id='isComplete' name='isComplete' defaultChecked={task?.isComplete} />
               <label htmlFor='isComplete'>完了</label>
             </div>
-            <div className='flex justify-between'>
+            <div className='flex justify-between pt-3'>
               <button className='px-4 py-2 bg-blue-500 text-white rounded underline' type='submit'>
                 登録
               </button>

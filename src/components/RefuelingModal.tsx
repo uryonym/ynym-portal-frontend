@@ -1,8 +1,9 @@
 import { FormEventHandler, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { FaTimes } from 'react-icons/fa'
+import { Refueling } from '../models/Refueling'
 import { createRefueling, deleteRefueling, formatDatetime, updateRefueling } from '../api/refuelingApi'
 import ConfirmationModal from './ConfirmationModal'
-import { Refueling } from '../models/Refueling'
 
 interface RefuelingModalProps {
   show: boolean
@@ -49,7 +50,16 @@ export default function RefuelingModal({ show, onClose, carId, refueling }: Refu
     const gasStand = form.get('gasStand') as string
 
     if (refueling?.id) {
-      const updateRefueling: Refueling = { ...refueling, refuelDatetime, odometer, fuelType, price, totalCost, isFull, gasStand }
+      const updateRefueling: Refueling = {
+        ...refueling,
+        refuelDatetime,
+        odometer,
+        fuelType,
+        price,
+        totalCost,
+        isFull,
+        gasStand,
+      }
       updateMutation.mutate({ carId, refueling: updateRefueling })
     } else {
       const newRefueling: Refueling = { refuelDatetime, odometer, fuelType, price, totalCost, isFull, gasStand }
@@ -68,81 +78,94 @@ export default function RefuelingModal({ show, onClose, carId, refueling }: Refu
 
   if (show) {
     return (
-      <>
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
-          <div className='bg-white p-4 rounded max-w-sm w-full'>
-            <div className='text-right'>
-              <button className='underline' type='button' onClick={onClose}>
-                閉じる
-              </button>
-            </div>
-            <h2 className='text-2xl font-bold mb-2'>燃費記録の{refueling ? '編集' : '新規作成'}</h2>
-            <form onSubmit={handleClickRegister}>
-              <div className='mb-2'>
-                <div>
-                  <label>給油日時</label>
-                </div>
-                <input type='datetime-local' name='refuelDatetime' defaultValue={formatDatetime(refueling?.refuelDatetime)} />
-              </div>
-              <div className='mb-2'>
-                <div>
-                  <label>総走行距離</label>
-                </div>
-                <input type='text' name='odometer' defaultValue={refueling?.odometer} />
-              </div>
-              <div className='mb-2'>
-                <div>
-                  <label>油種</label>
-                </div>
-                <input type='text' name='fuelType' defaultValue={refueling ? refueling.fuelType : "ガソリン"} />
-              </div>
-              <div className='mb-2'>
-                <div>
-                  <label>単価</label>
-                </div>
-                <input type='text' name='price' defaultValue={refueling?.price} />
-              </div>
-              <div className='mb-2'>
-                <div>
-                  <label>費用</label>
-                </div>
-                <input type='text' name='totalCost' defaultValue={refueling?.totalCost} />
-              </div>
-              <div className='mb-2 flex items-center gap-2'>
-                <input type='checkbox' id='isFull' name='isFull' defaultChecked={refueling?.isFull} />
-                <label htmlFor='isFull'>満タン</label>
-              </div>
-              <div className='mb-2'>
-                <div>
-                  <label>ガススタンド</label>
-                </div>
-                <input type='text' name='gasStand' defaultValue={refueling ? refueling.gasStand : "apollostation セルフ大池橋SS"} />
-              </div>
-              <div className='flex justify-between'>
-                <button className='px-4 py-2 bg-blue-500 text-white rounded underline' type='submit'>
-                  登録
-                </button>
-                {refueling && (
-                  <>
-                    <button
-                      className='px-4 py-2 bg-red-500 text-white rounded underline'
-                      type='button'
-                      onClick={() => setConfirmShow(true)}
-                    >
-                      削除
-                    </button>
-                    <ConfirmationModal
-                      show={confirmShow}
-                      onExec={() => handleClickDelete(refueling.id!)}
-                      onClose={() => setConfirmShow(false)}
-                    />
-                  </>
-                )}
-              </div>
-            </form>
+      <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
+        <div className='bg-white p-4 rounded max-w-sm w-full'>
+          <div className='text-right'>
+            <button className='underline' type='button' onClick={onClose}>
+              <FaTimes />
+            </button>
           </div>
+          <h2 className='text-2xl font-bold mb-2'>燃費記録の{refueling ? '編集' : '新規作成'}</h2>
+          <form onSubmit={handleClickRegister}>
+            <div className='mb-2'>
+              <div>
+                <label>給油日時</label>
+              </div>
+              <input
+                className='w-full'
+                type='datetime-local'
+                name='refuelDatetime'
+                defaultValue={formatDatetime(refueling?.refuelDatetime)}
+              />
+            </div>
+            <div className='mb-2'>
+              <div>
+                <label>総走行距離</label>
+              </div>
+              <input className='w-full' type='text' name='odometer' defaultValue={refueling?.odometer} />
+            </div>
+            <div className='mb-2'>
+              <div>
+                <label>油種</label>
+              </div>
+              <input
+                className='w-full'
+                type='text'
+                name='fuelType'
+                defaultValue={refueling ? refueling.fuelType : 'ガソリン'}
+              />
+            </div>
+            <div className='mb-2'>
+              <div>
+                <label>単価</label>
+              </div>
+              <input className='w-full' type='text' name='price' defaultValue={refueling?.price} />
+            </div>
+            <div className='mb-2'>
+              <div>
+                <label>費用</label>
+              </div>
+              <input className='w-full' type='text' name='totalCost' defaultValue={refueling?.totalCost} />
+            </div>
+            <div className='mb-2 pt-2 flex items-center gap-2'>
+              <input type='checkbox' id='isFull' name='isFull' defaultChecked={refueling?.isFull} />
+              <label htmlFor='isFull'>満タン</label>
+            </div>
+            <div className='mb-2'>
+              <div>
+                <label>ガススタンド</label>
+              </div>
+              <input
+                className='w-full'
+                type='text'
+                name='gasStand'
+                defaultValue={refueling ? refueling.gasStand : 'apollostation セルフ大池橋SS'}
+              />
+            </div>
+            <div className='flex justify-between pt-3'>
+              <button className='px-4 py-2 bg-blue-500 text-white rounded underline' type='submit'>
+                登録
+              </button>
+              {refueling && (
+                <>
+                  <button
+                    className='px-4 py-2 bg-red-500 text-white rounded underline'
+                    type='button'
+                    onClick={() => setConfirmShow(true)}
+                  >
+                    削除
+                  </button>
+                  <ConfirmationModal
+                    show={confirmShow}
+                    onExec={() => handleClickDelete(refueling.id!)}
+                    onClose={() => setConfirmShow(false)}
+                  />
+                </>
+              )}
+            </div>
+          </form>
         </div>
-      </>
+      </div>
     )
   } else {
     return

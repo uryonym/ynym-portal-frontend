@@ -1,10 +1,19 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { FaBars } from 'react-icons/fa'
 import { supabase } from '../libs/supabase'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 export default function Header() {
   const [open, setOpen] = useState<boolean>(false)
+  const navigate = useNavigate()
+
+  const onClickSignOut = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    await supabase.auth.signOut()
+
+    setOpen(false)
+    navigate({ to: "/signin" })
+  }
 
   return (
     <>
@@ -14,7 +23,7 @@ export default function Header() {
           <span>ynym-portal</span>
         </div>
       </div>
-      {open ? (
+      {open && (
         <div className='absolute top-0 left-0 h-screen w-screen bg-slate-600/50'>
           <div className='h-screen bg-white p-4 max-w-sm'>
             <div className='text-right'>
@@ -44,15 +53,13 @@ export default function Header() {
                 </Link>
               </li>
               <li className='pb-2'>
-                <Link className='underline' onClick={() => supabase.auth.signOut()}>
+                <button className='underline' onClick={onClickSignOut}>
                   サインアウト
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </>
   )

@@ -46,7 +46,7 @@ function Section() {
             <li className='flex gap-3 items-center p-2 border-b-2' key={section.id}>
               <div>
                 <p>
-                  <Link to={`/note/${noteId}/${section.id}`}>{section.name}</Link>
+                  <Link to="/note/$noteId/$sectionId" params={{ noteId: noteId, sectionId: section.id! }}>{section.name}</Link>
                 </p>
                 <p>seq: {section.seq}</p>
                 <button className='underline' type='button' onClick={() => handleClickEdit(section)}>

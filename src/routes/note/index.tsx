@@ -44,7 +44,7 @@ function Note() {
             <li className='flex gap-3 items-center p-2 border-b-2' key={note.id}>
               <div>
                 <p>
-                  <Link to={`/note/${note.id}`}>{note.name}</Link>
+                  <Link to="/note/$noteId" params={{ noteId: note.id! }}>{note.name}</Link>
                 </p>
                 <p>seq: {note.seq}</p>
                 <button className='underline' type='button' onClick={() => handleClickEdit(note)}>

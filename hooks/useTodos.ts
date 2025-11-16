@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { mockTodosResponse } from '@/lib/mocks/todos'
-import { fetchTasks, createTask } from '@/lib/api/todos'
+import { fetchTasks, createTask, updateTask, deleteTask } from '@/lib/api/todos'
 import { toast } from 'sonner'
 
 export function useTodos() {
@@ -47,28 +47,16 @@ export function useTodos() {
   }, [])
 
   // 更新
-  const updateTodo = useCallback((id: string, data: UpdateTodoInput) => {
+  const updateTodo = useCallback(async (id: string, data: UpdateTodoInput) => {
     setIsLoading(true)
     try {
+      const response = await updateTask(id, data)
       setTodos((prev) =>
-        prev.map((todo) =>
-          todo.id === id
-            ? {
-                ...todo,
-                ...data,
-                updated_at: new Date().toISOString(),
-                completed_at:
-                  data.is_completed === true
-                    ? new Date().toISOString()
-                    : data.is_completed === false
-                      ? null
-                      : todo.completed_at,
-              }
-            : todo,
-        ),
+        prev.map((todo) => (todo.id === id ? response.data : todo)),
       )
       toast.success('タスクを更新しました')
-    } catch {
+    } catch (error) {
+      console.error('Failed to update task:', error)
       toast.error('タスクの更新に失敗しました')
     } finally {
       setIsLoading(false)
@@ -76,12 +64,17 @@ export function useTodos() {
   }, [])
 
   // 削除
-  const deleteTodo = useCallback((id: string) => {
+  const deleteTodo = useCallback(async (id: string) => {
+    setIsLoading(true)
     try {
+      await deleteTask(id)
       setTodos((prev) => prev.filter((todo) => todo.id !== id))
       toast.success('タスクを削除しました')
-    } catch {
+    } catch (error) {
+      console.error('Failed to delete task:', error)
       toast.error('タスクの削除に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 

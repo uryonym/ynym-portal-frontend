@@ -1,4 +1,9 @@
-import { TodosResponse, TodoResponse, CreateTodoInput } from '../types/todo'
+import {
+  TodosResponse,
+  TodoResponse,
+  CreateTodoInput,
+  UpdateTodoInput,
+} from '../types/todo'
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
@@ -44,6 +49,49 @@ export async function createTask(
     return data
   } catch (error) {
     console.error('Failed to create task:', error)
+    throw error
+  }
+}
+
+export async function updateTask(
+  id: string,
+  input: UpdateTodoInput,
+): Promise<TodoResponse> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    })
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`)
+    }
+
+    const data: TodoResponse = await response.json()
+    return data
+  } catch (error) {
+    console.error('Failed to update task:', error)
+    throw error
+  }
+}
+
+export async function deleteTask(id: string): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`)
+    }
+  } catch (error) {
+    console.error('Failed to delete task:', error)
     throw error
   }
 }

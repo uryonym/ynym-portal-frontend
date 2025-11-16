@@ -1,7 +1,7 @@
 'use client'
 
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -25,6 +25,17 @@ export function TodoForm({
   const [title, setTitle] = useState(initialData?.title ?? '')
   const [description, setDescription] = useState(initialData?.description ?? '')
   const [dueDate, setDueDate] = useState(initialData?.due_date ?? '')
+  const titleInputRef = useRef<HTMLInputElement>(null)
+
+  // 編集時、タイトル入力にフォーカスを当て、カーソルを最後に配置
+  useEffect(() => {
+    if (initialData && titleInputRef.current) {
+      setTimeout(() => {
+        titleInputRef.current?.focus()
+        titleInputRef.current?.setSelectionRange(title.length, title.length)
+      }, 0)
+    }
+  }, [initialData, title.length])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,6 +63,7 @@ export function TodoForm({
           タイトル <span className="text-red-500">*</span>
         </label>
         <Input
+          ref={titleInputRef}
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}

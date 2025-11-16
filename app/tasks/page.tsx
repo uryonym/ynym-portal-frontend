@@ -53,7 +53,6 @@ export default function TasksPage() {
             todos={todos}
             onToggleComplete={toggleComplete}
             onEdit={handleEditTodo}
-            onDelete={deleteTodo}
             onAddNew={handleOpenDialog}
           />
         </main>
@@ -64,6 +63,7 @@ export default function TasksPage() {
         onOpenChange={setIsDialogOpen}
         initialData={editingTodo}
         onSubmit={handleSubmitForm}
+        onDelete={deleteTodo}
         isLoading={isLoading}
       />
 

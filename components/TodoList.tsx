@@ -10,7 +10,6 @@ interface TodoListProps {
   todos: Todo[]
   onToggleComplete: (id: string) => void
   onEdit: (todo: Todo) => void
-  onDelete: (id: string) => void
   onAddNew: () => void
 }
 
@@ -18,7 +17,6 @@ export function TodoList({
   todos,
   onToggleComplete,
   onEdit,
-  onDelete,
   onAddNew,
 }: TodoListProps) {
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all')
@@ -107,7 +105,6 @@ export function TodoList({
                 todo={todo}
                 onToggleComplete={onToggleComplete}
                 onEdit={onEdit}
-                onDelete={onDelete}
               />
             ))}
 

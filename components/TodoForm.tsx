@@ -5,11 +5,13 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Trash2 } from 'lucide-react'
 
 interface TodoFormProps {
   initialData?: Todo | null
   onSubmit: (data: CreateTodoInput | UpdateTodoInput) => void
   onCancel: () => void
+  onDelete?: (id: string) => void
   isLoading?: boolean
 }
 
@@ -17,6 +19,7 @@ export function TodoForm({
   initialData,
   onSubmit,
   onCancel,
+  onDelete,
   isLoading = false,
 }: TodoFormProps) {
   const [title, setTitle] = useState(initialData?.title ?? '')
@@ -93,23 +96,41 @@ export function TodoForm({
         />
       </div>
 
-      <div className="flex gap-2 justify-end pt-4">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onCancel}
-          disabled={isLoading}
-          className="h-10"
-        >
-          キャンセル
-        </Button>
-        <Button
-          type="submit"
-          disabled={isLoading || !title.trim()}
-          className="h-10"
-        >
-          {isLoading ? '保存中...' : '保存'}
-        </Button>
+      <div className="space-y-3 pt-4">
+        <div className="flex gap-2 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={isLoading}
+            className="h-10"
+          >
+            キャンセル
+          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading || !title.trim()}
+            className="h-10"
+          >
+            {isLoading ? '保存中...' : '保存'}
+          </Button>
+        </div>
+
+        {initialData && onDelete && (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => {
+              onDelete(initialData.id)
+              onCancel()
+            }}
+            disabled={isLoading}
+            className="w-full h-10 gap-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            このタスクを削除
+          </Button>
+        )}
       </div>
     </form>
   )

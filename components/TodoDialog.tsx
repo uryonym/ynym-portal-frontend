@@ -14,6 +14,7 @@ interface TodoDialogProps {
   onOpenChange: (open: boolean) => void
   initialData?: Todo | null
   onSubmit: (data: CreateTodoInput | UpdateTodoInput) => void
+  onDelete?: (id: string) => void
   isLoading?: boolean
 }
 
@@ -22,6 +23,7 @@ export function TodoDialog({
   onOpenChange,
   initialData,
   onSubmit,
+  onDelete,
   isLoading = false,
 }: TodoDialogProps) {
   const isEditMode = !!initialData
@@ -46,6 +48,7 @@ export function TodoDialog({
           initialData={initialData}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+          onDelete={onDelete}
           isLoading={isLoading}
         />
       </DialogContent>

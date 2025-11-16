@@ -3,7 +3,7 @@
 import { Todo } from '@/lib/types/todo'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
-import { Trash2, Pencil, Calendar } from 'lucide-react'
+import { Pencil, Calendar } from 'lucide-react'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 
@@ -11,15 +11,9 @@ interface TodoItemProps {
   todo: Todo
   onToggleComplete: (id: string) => void
   onEdit: (todo: Todo) => void
-  onDelete: (id: string) => void
 }
 
-export function TodoItem({
-  todo,
-  onToggleComplete,
-  onEdit,
-  onDelete,
-}: TodoItemProps) {
+export function TodoItem({ todo, onToggleComplete, onEdit }: TodoItemProps) {
   const formatDate = (dateString: string | null) => {
     if (!dateString) return null
     try {
@@ -70,15 +64,6 @@ export function TodoItem({
           aria-label="編集"
         >
           <Pencil className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(todo.id)}
-          className="h-10 w-10 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-          aria-label="削除"
-        >
-          <Trash2 className="h-4 w-4" />
         </Button>
       </div>
     </div>

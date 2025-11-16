@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { Home, Settings, FileText, LayoutDashboard } from 'lucide-react'
+import { Home, Settings, FileText, CalendarCheck } from 'lucide-react'
 
 const menuItems = [
   {
@@ -19,9 +19,9 @@ const menuItems = [
     icon: Home,
   },
   {
-    title: 'ダッシュボード',
-    url: '/dashboard',
-    icon: LayoutDashboard,
+    title: 'タスク',
+    url: '/tasks',
+    icon: CalendarCheck,
   },
   {
     title: 'ドキュメント',
@@ -40,7 +40,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>ナビゲーション</SidebarGroupLabel>
+          <SidebarGroupLabel>メニュー</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (

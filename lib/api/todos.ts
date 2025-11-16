@@ -24,7 +24,9 @@ export async function fetchTasks(): Promise<TodosResponse> {
   }
 }
 
-export async function createTask(input: CreateTodoInput): Promise<TodoResponse> {
+export async function createTask(
+  input: CreateTodoInput,
+): Promise<TodoResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/tasks`, {
       method: 'POST',

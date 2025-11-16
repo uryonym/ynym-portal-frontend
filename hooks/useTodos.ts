@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { mockTodosResponse } from '@/lib/mocks/todos'
-import { fetchTasks } from '@/lib/api/todos'
+import { fetchTasks, createTask } from '@/lib/api/todos'
 import { toast } from 'sonner'
 
 export function useTodos() {
@@ -32,26 +32,14 @@ export function useTodos() {
   }, [])
 
   // 新規追加
-  const addTodo = useCallback((data: CreateTodoInput) => {
+  const addTodo = useCallback(async (data: CreateTodoInput) => {
     setIsLoading(true)
     try {
-      // モックAPI呼び出し
-      const newTodo: Todo = {
-        id: `todo-${Date.now()}`,
-        user_id: '550e8400-e29b-41d4-a716-446655440000',
-        title: data.title,
-        description: data.description ?? null,
-        is_completed: false,
-        completed_at: null,
-        due_date: data.due_date ?? null,
-        order: 0,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      }
-
-      setTodos((prev) => [newTodo, ...prev])
+      const response = await createTask(data)
+      setTodos((prev) => [response.data, ...prev])
       toast.success('タスクを作成しました')
-    } catch {
+    } catch (error) {
+      console.error('Failed to create task:', error)
       toast.error('タスクの作成に失敗しました')
     } finally {
       setIsLoading(false)

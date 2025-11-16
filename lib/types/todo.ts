@@ -16,6 +16,11 @@ export interface TodosResponse {
   message: string
 }
 
+export interface TodoResponse {
+  data: Todo
+  message: string
+}
+
 export interface CreateTodoInput {
   title: string
   description?: string

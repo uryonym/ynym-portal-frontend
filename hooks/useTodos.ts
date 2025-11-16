@@ -1,14 +1,35 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { mockTodosResponse } from '@/lib/mocks/todos'
+import { fetchTasks } from '@/lib/api/todos'
 import { toast } from 'sonner'
 
 export function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>(mockTodosResponse.data)
-  const [isLoading, setIsLoading] = useState(false)
+  const [todos, setTodos] = useState<Todo[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+
+  // 初期化時にタスク一覧を取得
+  useEffect(() => {
+    const loadTasks = async () => {
+      setIsLoading(true)
+      try {
+        const response = await fetchTasks()
+        setTodos(response.data)
+      } catch {
+        console.error('Failed to load tasks, using mock data')
+        // エラー時はモックデータにフォールバック
+        setTodos(mockTodosResponse.data)
+        toast.error('タスク一覧の取得に失敗しました')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadTasks()
+  }, [])
 
   // 新規追加
   const addTodo = useCallback((data: CreateTodoInput) => {

@@ -1,12 +1,17 @@
-import Header from './components/Header';
+import Header from './components/Header'
+import { AppSidebar } from './components/AppSidebar'
+import { SidebarInset } from '@/components/ui/sidebar'
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1 p-6">
-        <p>ynym portal site.</p>
-      </main>
-    </div>
-  );
+    <>
+      <AppSidebar />
+      <SidebarInset>
+        <Header />
+        <main className="flex-1 p-6">
+          <p>ynym portal site.</p>
+        </main>
+      </SidebarInset>
+    </>
+  )
 }

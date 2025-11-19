@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import { SidebarProvider } from '@/components/ui/sidebar'
+
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/AppSidebar'
+import Header from '@/components/Header'
+
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -22,7 +26,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="font-sans">
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <Header />
+            {children}
+          </SidebarInset>
+        </SidebarProvider>
       </body>
     </html>
   )

@@ -1,9 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Header from '@/components/Header'
-import { AppSidebar } from '@/components/AppSidebar'
-import { SidebarInset } from '@/components/ui/sidebar'
 import { TodoList } from '@/components/TodoList'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Toaster } from '@/components/ui/sonner'
@@ -45,18 +42,14 @@ export default function TasksPage() {
 
   return (
     <>
-      <AppSidebar />
-      <SidebarInset>
-        <Header />
-        <main className="flex-1 p-4 sm:p-6">
-          <TodoList
-            todos={todos}
-            onToggleComplete={toggleComplete}
-            onEdit={handleEditTodo}
-            onAddNew={handleOpenDialog}
-          />
-        </main>
-      </SidebarInset>
+      <main className="flex-1 p-4 sm:p-6">
+        <TodoList
+          todos={todos}
+          onToggleComplete={toggleComplete}
+          onEdit={handleEditTodo}
+          onAddNew={handleOpenDialog}
+        />
+      </main>
 
       <TodoDialog
         open={isDialogOpen}

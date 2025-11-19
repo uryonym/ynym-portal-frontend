@@ -34,7 +34,7 @@ export function TodoItem({ todo, onToggleComplete, onEdit }: TodoItemProps) {
 
       <div className="flex-1 min-w-0">
         <h3
-          className={`text-base font-medium break-words ${
+          className={`text-base font-medium wrap-break-word ${
             todo.is_completed ? 'line-through text-gray-400' : 'text-gray-900'
           }`}
         >
@@ -42,7 +42,7 @@ export function TodoItem({ todo, onToggleComplete, onEdit }: TodoItemProps) {
         </h3>
 
         {todo.description && (
-          <p className="text-sm text-gray-600 mt-1 break-words">
+          <p className="text-sm text-gray-600 mt-1 wrap-break-word">
             {todo.description}
           </p>
         )}

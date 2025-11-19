@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { Home, Settings, FileText, CalendarCheck } from 'lucide-react'
+import { Home, Settings, FileText, CalendarCheck, Car } from 'lucide-react'
 
 const menuItems = [
   {
@@ -22,6 +22,11 @@ const menuItems = [
     title: 'タスク',
     url: '/tasks',
     icon: CalendarCheck,
+  },
+  {
+    title: '車両管理',
+    url: '/vehicles',
+    icon: Car,
   },
   {
     title: 'ドキュメント',

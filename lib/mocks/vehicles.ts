@@ -1,0 +1,46 @@
+import { VehiclesResponse } from '@/lib/types/vehicle'
+
+export const mockVehicles: VehiclesResponse = {
+  data: [
+    {
+      id: '550e8400-e29b-41d4-a716-446655440001',
+      user_id: '550e8400-e29b-41d4-a716-446655440000',
+      name: 'マイカー1',
+      seq: 1,
+      maker: 'Toyota',
+      model: 'Prius',
+      year: 2023,
+      number: '東京 123あ 1234',
+      tank_capacity: 50,
+      created_at: '2025-11-19T11:43:58.857542+00:00',
+      updated_at: '2025-11-19T11:43:58.857542+00:00',
+    },
+    {
+      id: '550e8400-e29b-41d4-a716-446655440002',
+      user_id: '550e8400-e29b-41d4-a716-446655440000',
+      name: 'マイカー2',
+      seq: 2,
+      maker: 'Honda',
+      model: 'Fit',
+      year: 2021,
+      number: '神奈川 456い 5678',
+      tank_capacity: 40,
+      created_at: '2025-11-19T11:43:58.857542+00:00',
+      updated_at: '2025-11-19T11:43:58.857542+00:00',
+    },
+    {
+      id: '550e8400-e29b-41d4-a716-446655440003',
+      user_id: '550e8400-e29b-41d4-a716-446655440000',
+      name: 'マイカー3',
+      seq: 3,
+      maker: 'Nissan',
+      model: 'Note',
+      year: 2020,
+      number: '埼玉 789う 9012',
+      tank_capacity: 42,
+      created_at: '2025-11-19T11:43:58.857542+00:00',
+      updated_at: '2025-11-19T11:43:58.857542+00:00',
+    },
+  ],
+  message: '車一覧を取得しました',
+}

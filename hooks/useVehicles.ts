@@ -1,34 +1,37 @@
 'use client'
 
+import { useState, useCallback, useEffect } from 'react'
 import {
   Vehicle,
   CreateVehicleInput,
   UpdateVehicleInput,
 } from '@/lib/types/vehicle'
-import { useState, useEffect, useCallback } from 'react'
-import { fetchVehicles } from '@/lib/api/vehicles'
 import { mockVehicles } from '@/lib/mocks/vehicles'
+import {
+  fetchVehicles,
+  createVehicle,
+  updateVehicle as updateVehicleAPI,
+  deleteVehicle as deleteVehicleAPI,
+} from '@/lib/api/vehicles'
 import { toast } from 'sonner'
 
 export function useVehicles() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null)
 
-  // 初期ロード
+  // 初期化時に車両一覧を取得
   useEffect(() => {
     const loadVehicles = async () => {
       setIsLoading(true)
       try {
         const response = await fetchVehicles()
         setVehicles(response.data)
-      } catch (error) {
-        console.error('Failed to fetch vehicles:', error)
-        // フォールバック：モックデータを使用
+      } catch {
+        console.error('Failed to load vehicles, using mock data')
+        // エラー時はモックデータにフォールバック
         setVehicles(mockVehicles.data)
-        toast.error(
-          '車両データの読み込みに失敗しました。デモデータを表示しています。',
-        )
+        toast.error('車両一覧の取得に失敗しました')
       } finally {
         setIsLoading(false)
       }
@@ -37,48 +40,30 @@ export function useVehicles() {
     loadVehicles()
   }, [])
 
-  const addVehicle = useCallback(
-    async (data: CreateVehicleInput) => {
-      setIsLoading(true)
-      try {
-        // モックデータなので、ローカルで新規車両を作成
-        const newVehicle: Vehicle = {
-          id: `mock-${Date.now()}`,
-          user_id: '550e8400-e29b-41d4-a716-446655440000',
-          ...data,
-          seq: vehicles.length + 1,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }
-        setVehicles([newVehicle, ...vehicles])
-        toast.success('車両を追加しました')
-      } catch (error) {
-        console.error('Failed to create vehicle:', error)
-        toast.error('車両の追加に失敗しました')
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [vehicles],
-  )
+  // 新規追加
+  const addVehicle = useCallback(async (data: CreateVehicleInput) => {
+    setIsLoading(true)
+    try {
+      const response = await createVehicle(data)
+      setVehicles((prev) => [response.data, ...prev])
+      toast.success('車両を追加しました')
+    } catch (error) {
+      console.error('Failed to create vehicle:', error)
+      toast.error('車両の追加に失敗しました')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
+  // 更新
   const updateVehicle = useCallback(
     async (id: string, data: UpdateVehicleInput) => {
       setIsLoading(true)
       try {
-        // モックデータなので、ローカルで更新
+        const response = await updateVehicleAPI(id, data)
         setVehicles((prev) =>
-          prev.map((v) =>
-            v.id === id
-              ? {
-                  ...v,
-                  ...data,
-                  updated_at: new Date().toISOString(),
-                }
-              : v,
-          ),
+          prev.map((vehicle) => (vehicle.id === id ? response.data : vehicle)),
         )
-        setEditingVehicle(null)
         toast.success('車両を更新しました')
       } catch (error) {
         console.error('Failed to update vehicle:', error)
@@ -90,11 +75,12 @@ export function useVehicles() {
     [],
   )
 
+  // 削除
   const deleteVehicle = useCallback(async (id: string) => {
     setIsLoading(true)
     try {
-      // モックデータなので、ローカルで削除
-      setVehicles((prev) => prev.filter((v) => v.id !== id))
+      await deleteVehicleAPI(id)
+      setVehicles((prev) => prev.filter((vehicle) => vehicle.id !== id))
       toast.success('車両を削除しました')
     } catch (error) {
       console.error('Failed to delete vehicle:', error)

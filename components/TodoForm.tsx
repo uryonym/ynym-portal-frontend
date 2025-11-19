@@ -5,7 +5,15 @@ import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Trash2 } from 'lucide-react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar } from '@/components/ui/calendar'
+import { Trash2, Calendar as CalendarIcon, X } from 'lucide-react'
+import { format, parse } from 'date-fns'
+import { ja } from 'date-fns/locale'
 
 interface TodoFormProps {
   initialData?: Todo | null
@@ -25,17 +33,18 @@ export function TodoForm({
   const [title, setTitle] = useState(initialData?.title ?? '')
   const [description, setDescription] = useState(initialData?.description ?? '')
   const [dueDate, setDueDate] = useState(initialData?.due_date ?? '')
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const titleInputRef = useRef<HTMLInputElement>(null)
 
-  // 編集時、タイトル入力にフォーカスを当て、カーソルを最後に配置
+  // 新規追加時はオートフォーカス、編集時はカーソルを最後に配置
   useEffect(() => {
     if (initialData && titleInputRef.current) {
+      // 編集時: フォーカスを外す
       setTimeout(() => {
-        titleInputRef.current?.focus()
-        titleInputRef.current?.setSelectionRange(title.length, title.length)
+        titleInputRef.current?.blur()
       }, 0)
     }
-  }, [initialData, title.length])
+  }, [initialData])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -98,14 +107,59 @@ export function TodoForm({
         >
           期日
         </label>
-        <Input
-          id="dueDate"
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          disabled={isLoading}
-          className="h-10"
-        />
+        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              id="dueDate"
+              variant="outline"
+              className="w-full justify-start text-left font-normal h-10"
+              disabled={isLoading}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dueDate
+                ? format(parse(dueDate, 'yyyy-MM-dd', new Date()), 'M月d日', {
+                    locale: ja,
+                  })
+                : '期日を選択'}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <div className="flex flex-col">
+              <Calendar
+                mode="single"
+                selected={
+                  dueDate ? parse(dueDate, 'yyyy-MM-dd', new Date()) : undefined
+                }
+                onSelect={(date) => {
+                  if (date) {
+                    setDueDate(format(date, 'yyyy-MM-dd'))
+                    setIsCalendarOpen(false)
+                  }
+                }}
+                disabled={isLoading}
+                locale={ja}
+              />
+              {dueDate && (
+                <div className="border-t p-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="w-full gap-2 text-gray-600 hover:text-red-600"
+                    onClick={() => {
+                      setDueDate('')
+                      setIsCalendarOpen(false)
+                    }}
+                    disabled={isLoading}
+                  >
+                    <X className="h-4 w-4" />
+                    期日をクリア
+                  </Button>
+                </div>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div className="space-y-3 pt-4">

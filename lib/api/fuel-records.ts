@@ -6,11 +6,16 @@ import {
   UpdateFuelRecordInput,
 } from '@/lib/types/fuel-record'
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
 
-export async function fetchFuelRecords(vehicleId: string): Promise<FuelRecordsResponse> {
+export async function fetchFuelRecords(
+  vehicleId: string,
+): Promise<FuelRecordsResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/fuel-records?vehicle_id=${vehicleId}`)
+    const response = await fetch(
+      `${BASE_URL}/fuel-records?vehicle_id=${vehicleId}`,
+    )
     if (!response.ok) {
       throw new Error(`Failed to fetch fuel records: ${response.statusText}`)
     }
@@ -21,7 +26,9 @@ export async function fetchFuelRecords(vehicleId: string): Promise<FuelRecordsRe
   }
 }
 
-export async function createFuelRecord(input: CreateFuelRecordInput): Promise<FuelRecordResponse> {
+export async function createFuelRecord(
+  input: CreateFuelRecordInput,
+): Promise<FuelRecord> {
   try {
     const response = await fetch(`${BASE_URL}/fuel-records`, {
       method: 'POST',
@@ -43,7 +50,7 @@ export async function createFuelRecord(input: CreateFuelRecordInput): Promise<Fu
 export async function updateFuelRecord(
   id: string,
   input: UpdateFuelRecordInput,
-): Promise<FuelRecordResponse> {
+): Promise<FuelRecord> {
   try {
     const response = await fetch(`${BASE_URL}/fuel-records/${id}`, {
       method: 'PUT',

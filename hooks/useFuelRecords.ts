@@ -53,8 +53,8 @@ export function useFuelRecords(vehicleId: string | null) {
   const addRecord = useCallback(async (data: CreateFuelRecordInput) => {
     setIsLoading(true)
     try {
-      const response = await createFuelRecord(data)
-      setRecords((prev) => [response.data, ...prev])
+      const newRecord = await createFuelRecord(data)
+      setRecords((prev) => [newRecord, ...prev])
       toast.success('燃費記録を追加しました')
     } catch (error) {
       console.error('Failed to create fuel record:', error)
@@ -69,9 +69,9 @@ export function useFuelRecords(vehicleId: string | null) {
     async (id: string, data: UpdateFuelRecordInput) => {
       setIsLoading(true)
       try {
-        const response = await updateFuelRecordAPI(id, data)
+        const updatedRecord = await updateFuelRecordAPI(id, data)
         setRecords((prev) =>
-          prev.map((record) => (record.id === id ? response.data : record)),
+          prev.map((record) => (record.id === id ? updatedRecord : record)),
         )
         toast.success('燃費記録を更新しました')
       } catch (error) {

@@ -1,0 +1,45 @@
+export interface FuelRecord {
+  id: string
+  vehicle_id: string
+  user_id: string
+  refuel_datetime: string
+  total_mileage: number
+  fuel_type: string
+  unit_price: number
+  total_cost: number
+  is_full_tank: boolean
+  gas_station_name?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface FuelRecordsResponse {
+  data: FuelRecord[]
+  message: string
+}
+
+export interface FuelRecordResponse {
+  data: FuelRecord
+  message: string
+}
+
+export interface CreateFuelRecordInput {
+  vehicle_id: string
+  refuel_datetime: string
+  total_mileage: number
+  fuel_type: string
+  unit_price: number
+  total_cost: number
+  is_full_tank?: boolean
+  gas_station_name?: string
+}
+
+export interface UpdateFuelRecordInput {
+  refuel_datetime?: string
+  total_mileage?: number
+  fuel_type?: string
+  unit_price?: number
+  total_cost?: number
+  is_full_tank?: boolean
+  gas_station_name?: string
+}

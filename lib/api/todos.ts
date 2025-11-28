@@ -8,9 +8,20 @@ import {
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
 
-export async function fetchTasks(): Promise<TodosResponse> {
+export type TaskFilter = 'all' | 'active' | 'completed'
+
+export async function fetchTasks(
+  filter: TaskFilter = 'active',
+): Promise<TodosResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks`, {
+    let url = `${API_BASE_URL}/tasks`
+    if (filter === 'active') {
+      url += '?is_completed=false'
+    } else if (filter === 'completed') {
+      url += '?is_completed=true'
+    }
+
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

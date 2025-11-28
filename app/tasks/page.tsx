@@ -17,6 +17,8 @@ export default function TasksPage() {
     updateTodo,
     deleteTodo,
     toggleComplete,
+    filter,
+    setFilter,
   } = useTodos()
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -48,6 +50,9 @@ export default function TasksPage() {
           onToggleComplete={toggleComplete}
           onEdit={handleEditTodo}
           onAddNew={handleOpenDialog}
+          filter={filter}
+          onFilterChange={setFilter}
+          isLoading={isLoading}
         />
       </main>
 

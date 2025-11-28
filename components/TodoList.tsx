@@ -1,7 +1,8 @@
 'use client'
 
 import { Todo } from '@/lib/types/todo'
-import { useCallback, useRef, useEffect, useState } from 'react'
+import { TaskFilter } from '@/lib/api/todos'
+import { useRef, useEffect, useState } from 'react'
 import { TodoItem } from './TodoItem'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
@@ -11,6 +12,9 @@ interface TodoListProps {
   onToggleComplete: (id: string) => void
   onEdit: (todo: Todo) => void
   onAddNew: () => void
+  filter: TaskFilter
+  onFilterChange: (filter: TaskFilter) => void
+  isLoading?: boolean
 }
 
 export function TodoList({
@@ -18,21 +22,16 @@ export function TodoList({
   onToggleComplete,
   onEdit,
   onAddNew,
+  filter,
+  onFilterChange,
+  isLoading = false,
 }: TodoListProps) {
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all')
   const [displayedCount, setDisplayedCount] = useState(10)
   const observerTarget = useRef<HTMLDivElement>(null)
 
-  // フィルタリング
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === 'active') return !todo.is_completed
-    if (filter === 'completed') return todo.is_completed
-    return true
-  })
-
   // 表示するアイテム
-  const displayedTodos = filteredTodos.slice(0, displayedCount)
-  const hasMore = displayedCount < filteredTodos.length
+  const displayedTodos = todos.slice(0, displayedCount)
+  const hasMore = displayedCount < todos.length
 
   // 無限スクロール実装
   useEffect(() => {
@@ -70,26 +69,29 @@ export function TodoList({
 
       {/* フィルタボタン */}
       <div className="flex gap-2 flex-wrap">
-        {(['all', 'active', 'completed'] as const).map((filterType) => (
+        {(['active', 'completed', 'all'] as const).map((filterType) => (
           <Button
             key={filterType}
             variant={filter === filterType ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setFilter(filterType)}
+            onClick={() => onFilterChange(filterType)}
             className="h-9"
+            disabled={isLoading}
           >
             {filterType === 'all' && 'すべて'}
-            {filterType === 'active' &&
-              `進行中 (${todos.filter((t) => !t.is_completed).length})`}
-            {filterType === 'completed' &&
-              `完了 (${todos.filter((t) => t.is_completed).length})`}
+            {filterType === 'active' && '進行中'}
+            {filterType === 'completed' && '完了'}
           </Button>
         ))}
       </div>
 
       {/* Todoアイテムリスト */}
       <div className="space-y-3">
-        {displayedTodos.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : displayedTodos.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500">
               {filter === 'completed' && 'まだ完了したタスクがありません'}
@@ -119,10 +121,9 @@ export function TodoList({
       </div>
 
       {/* 統計 */}
-      {displayedTodos.length > 0 && (
+      {!isLoading && displayedTodos.length > 0 && (
         <div className="text-center text-sm text-gray-500 pt-4">
-          {filter === 'all' &&
-            `全 ${filteredTodos.length} 件中 ${displayedCount} 件を表示`}
+          {`全 ${todos.length} 件中 ${Math.min(displayedCount, todos.length)} 件を表示`}
         </div>
       )}
     </div>

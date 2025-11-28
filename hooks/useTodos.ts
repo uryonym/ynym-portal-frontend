@@ -3,7 +3,13 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { mockTodosResponse } from '@/lib/mocks/todos'
-import { fetchTasks, createTask, updateTask, deleteTask } from '@/lib/api/todos'
+import {
+  fetchTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  TaskFilter,
+} from '@/lib/api/todos'
 import { toast } from 'sonner'
 
 // タスクのソート関数
@@ -33,29 +39,36 @@ export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+  const [filter, setFilter] = useState<TaskFilter>('active')
 
   // ソート済みのtodosを返す
   const sortedTodos = useMemo(() => sortTodos(todos), [todos])
 
-  // 初期化時にタスク一覧を取得
-  useEffect(() => {
-    const loadTasks = async () => {
-      setIsLoading(true)
-      try {
-        const response = await fetchTasks()
-        setTodos(response.data)
-      } catch {
-        console.error('Failed to load tasks, using mock data')
-        // エラー時はモックデータにフォールバック
-        setTodos(mockTodosResponse.data)
-        toast.error('タスク一覧の取得に失敗しました')
-      } finally {
-        setIsLoading(false)
-      }
+  // フィルタ変更時にタスク一覧を取得
+  const loadTasks = useCallback(async (currentFilter: TaskFilter) => {
+    setIsLoading(true)
+    try {
+      const response = await fetchTasks(currentFilter)
+      setTodos(response.data)
+    } catch {
+      console.error('Failed to load tasks, using mock data')
+      // エラー時はモックデータにフォールバック
+      const filtered = mockTodosResponse.data.filter((t) => {
+        if (currentFilter === 'active') return !t.is_completed
+        if (currentFilter === 'completed') return t.is_completed
+        return true
+      })
+      setTodos(filtered)
+      toast.error('タスク一覧の取得に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
-
-    loadTasks()
   }, [])
+
+  // 初期化時・フィルタ変更時にタスク一覧を取得
+  useEffect(() => {
+    loadTasks(filter)
+  }, [filter, loadTasks])
 
   // 新規追加
   const addTodo = useCallback(async (data: CreateTodoInput) => {
@@ -124,5 +137,7 @@ export function useTodos() {
     updateTodo,
     deleteTodo,
     toggleComplete,
+    filter,
+    setFilter,
   }
 }

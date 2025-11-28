@@ -1,15 +1,41 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { mockTodosResponse } from '@/lib/mocks/todos'
 import { fetchTasks, createTask, updateTask, deleteTask } from '@/lib/api/todos'
 import { toast } from 'sonner'
 
+// タスクのソート関数
+// 1. 未完了 → 完了済み
+// 2. 期日の昇順（期日なしは最後）
+// 3. 作成日時の古い順
+function sortTodos(todos: Todo[]): Todo[] {
+  return [...todos].sort((a, b) => {
+    // 1. 完了状態で比較（未完了が先）
+    if (a.is_completed !== b.is_completed) {
+      return a.is_completed ? 1 : -1
+    }
+
+    // 2. 期日で比較（期日なしは最後）
+    if (a.due_date !== b.due_date) {
+      if (!a.due_date) return 1
+      if (!b.due_date) return -1
+      return new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
+    }
+
+    // 3. 作成日時の古い順
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  })
+}
+
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+
+  // ソート済みのtodosを返す
+  const sortedTodos = useMemo(() => sortTodos(todos), [todos])
 
   // 初期化時にタスク一覧を取得
   useEffect(() => {
@@ -90,7 +116,7 @@ export function useTodos() {
   )
 
   return {
-    todos,
+    todos: sortedTodos,
     isLoading,
     editingTodo,
     setEditingTodo,

@@ -9,6 +9,9 @@ export interface FuelRecord {
   total_cost: number
   is_full_tank: boolean
   gas_station_name?: string
+  distance_traveled?: number | null
+  fuel_amount?: number | null
+  fuel_efficiency?: number | null
   created_at: string
   updated_at: string
 }

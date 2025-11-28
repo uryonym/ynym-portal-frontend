@@ -31,9 +31,29 @@ export function FuelRecordItem({ record, onEdit }: FuelRecordItemProps) {
           )}
         </div>
         <div className="space-y-1 text-xs text-gray-600">
-          <p>走行距離: {record.total_mileage}km</p>
-          <p>単価: ¥{record.unit_price} × 合計: ¥{record.total_cost}</p>
-          {record.gas_station_name && <p>スタンド: {record.gas_station_name}</p>}
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <span>総走行距離: {record.total_mileage.toLocaleString()}km</span>
+            {record.distance_traveled != null && (
+              <span>
+                走行距離: {record.distance_traveled.toLocaleString()}km
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <span>単価: ¥{record.unit_price.toLocaleString()}</span>
+            <span>合計: ¥{record.total_cost.toLocaleString()}</span>
+            {record.fuel_amount != null && (
+              <span>給油量: {record.fuel_amount.toFixed(2)}L</span>
+            )}
+          </div>
+          {record.fuel_efficiency != null && (
+            <p className="font-medium text-blue-600">
+              燃費: {record.fuel_efficiency.toFixed(2)}km/L
+            </p>
+          )}
+          {record.gas_station_name && (
+            <p>スタンド: {record.gas_station_name}</p>
+          )}
         </div>
       </div>
       <Button

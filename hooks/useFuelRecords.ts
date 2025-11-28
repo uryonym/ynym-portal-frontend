@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import {
   FuelRecord,
   CreateFuelRecordInput,
@@ -15,10 +15,23 @@ import {
 } from '@/lib/api/fuel-records'
 import { toast } from 'sonner'
 
+// 燃費記録のソート関数（給油日時の降順）
+function sortFuelRecords(records: FuelRecord[]): FuelRecord[] {
+  return [...records].sort((a, b) => {
+    return (
+      new Date(b.refuel_datetime).getTime() -
+      new Date(a.refuel_datetime).getTime()
+    )
+  })
+}
+
 export function useFuelRecords(vehicleId: string | null) {
   const [records, setRecords] = useState<FuelRecord[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [editingRecord, setEditingRecord] = useState<FuelRecord | null>(null)
+
+  // ソート済みのrecordsを返す
+  const sortedRecords = useMemo(() => sortFuelRecords(records), [records])
 
   // 車両IDが変更されたときに燃費記録を取得
   useEffect(() => {
@@ -100,7 +113,7 @@ export function useFuelRecords(vehicleId: string | null) {
   }, [])
 
   return {
-    records,
+    records: sortedRecords,
     isLoading,
     editingRecord,
     setEditingRecord,

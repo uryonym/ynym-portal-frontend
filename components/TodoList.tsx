@@ -2,7 +2,6 @@
 
 import { Todo } from '@/lib/types/todo'
 import { TaskFilter } from '@/lib/api/todos'
-import { useRef, useEffect, useState } from 'react'
 import { TodoItem } from './TodoItem'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
@@ -26,36 +25,6 @@ export function TodoList({
   onFilterChange,
   isLoading = false,
 }: TodoListProps) {
-  const [displayedCount, setDisplayedCount] = useState(10)
-  const observerTarget = useRef<HTMLDivElement>(null)
-
-  // 表示するアイテム
-  const displayedTodos = todos.slice(0, displayedCount)
-  const hasMore = displayedCount < todos.length
-
-  // 無限スクロール実装
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          setDisplayedCount((prev) => prev + 10)
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current)
-    }
-
-    return () => observer.disconnect()
-  }, [hasMore])
-
-  // フィルタ変更時は表示数をリセット
-  useEffect(() => {
-    setDisplayedCount(10)
-  }, [filter])
-
   return (
     <div className="space-y-4">
       {/* ヘッダー */}
@@ -91,7 +60,7 @@ export function TodoList({
           <div className="flex justify-center py-12">
             <div className="h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
           </div>
-        ) : displayedTodos.length === 0 ? (
+        ) : todos.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500">
               {filter === 'completed' && 'まだ完了したタスクがありません'}
@@ -100,32 +69,16 @@ export function TodoList({
             </p>
           </div>
         ) : (
-          <>
-            {displayedTodos.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                onToggleComplete={onToggleComplete}
-                onEdit={onEdit}
-              />
-            ))}
-
-            {/* 無限スクロール用のセンチネル */}
-            {hasMore && (
-              <div ref={observerTarget} className="flex justify-center py-6">
-                <div className="h-6 w-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            )}
-          </>
+          todos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onToggleComplete={onToggleComplete}
+              onEdit={onEdit}
+            />
+          ))
         )}
       </div>
-
-      {/* 統計 */}
-      {!isLoading && displayedTodos.length > 0 && (
-        <div className="text-center text-sm text-gray-500 pt-4">
-          {`全 ${todos.length} 件中 ${Math.min(displayedCount, todos.length)} 件を表示`}
-        </div>
-      )}
     </div>
   )
 }

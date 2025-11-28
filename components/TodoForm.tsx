@@ -55,8 +55,8 @@ export function TodoForm({
 
     const data = {
       title: title.trim(),
-      ...(description && { description: description.trim() }),
-      ...(dueDate && { due_date: dueDate }),
+      description: description.trim() || null,
+      due_date: dueDate || null,
     }
 
     onSubmit(data)

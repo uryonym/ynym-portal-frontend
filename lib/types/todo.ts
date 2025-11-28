@@ -23,13 +23,13 @@ export interface TodoResponse {
 
 export interface CreateTodoInput {
   title: string
-  description?: string
-  due_date?: string
+  description?: string | null
+  due_date?: string | null
 }
 
 export interface UpdateTodoInput {
   title?: string
-  description?: string
+  description?: string | null
   is_completed?: boolean
-  due_date?: string
+  due_date?: string | null
 }

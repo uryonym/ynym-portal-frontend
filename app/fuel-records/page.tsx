@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useVehicles } from '@/hooks/useVehicles'
 import { useFuelRecords } from '@/hooks/useFuelRecords'
 import { FuelRecordList } from '@/components/FuelRecordList'
@@ -8,15 +8,29 @@ import { FuelRecordDialog } from '@/components/FuelRecordDialog'
 import {
   CreateFuelRecordInput,
   UpdateFuelRecordInput,
+  FuelRecord,
 } from '@/lib/types/fuel-record'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/sonner'
 
 export default function FuelRecordsPage() {
   const { vehicles, isLoading: vehiclesLoading } = useVehicles()
+
+  // seqが最大の車両IDを計算
+  const defaultVehicleId = useMemo(() => {
+    if (vehicles.length === 0) return null
+    const vehicleWithMaxSeq = vehicles.reduce((max, vehicle) =>
+      vehicle.seq > max.seq ? vehicle : max,
+    )
+    return vehicleWithMaxSeq.id
+  }, [vehicles])
+
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(
     null,
   )
+
+  // 選択中の車両ID（未選択の場合はデフォルトを使用）
+  const activeVehicleId = selectedVehicleId ?? defaultVehicleId
 
   const {
     records,
@@ -26,22 +40,16 @@ export default function FuelRecordsPage() {
     addRecord,
     updateRecord,
     deleteRecord,
-  } = useFuelRecords(selectedVehicleId)
+  } = useFuelRecords(activeVehicleId)
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  useEffect(() => {
-    if (vehicles.length > 0 && !selectedVehicleId) {
-      setSelectedVehicleId(vehicles[0].id)
-    }
-  }, [vehicles, selectedVehicleId])
 
   const handleOpenDialog = () => {
     setEditingRecord(null)
     setIsDialogOpen(true)
   }
 
-  const handleEditRecord = (recordToEdit: any) => {
+  const handleEditRecord = (recordToEdit: FuelRecord) => {
     setEditingRecord(recordToEdit)
     setIsDialogOpen(true)
   }
@@ -103,7 +111,7 @@ export default function FuelRecordsPage() {
               対象車両を選択
             </label>
             <select
-              value={selectedVehicleId || ''}
+              value={activeVehicleId || ''}
               onChange={(e) => setSelectedVehicleId(e.target.value)}
               className="w-full h-10 px-3 border border-gray-300 rounded-md text-sm"
             >
@@ -115,7 +123,7 @@ export default function FuelRecordsPage() {
             </select>
           </div>
 
-          {selectedVehicleId && (
+          {activeVehicleId && (
             <FuelRecordList
               records={records}
               onEdit={handleEditRecord}
@@ -125,11 +133,11 @@ export default function FuelRecordsPage() {
         </div>
       </main>
 
-      {selectedVehicleId && (
+      {activeVehicleId && (
         <FuelRecordDialog
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
-          vehicleId={selectedVehicleId}
+          vehicleId={activeVehicleId}
           initialData={editingRecord}
           onSubmit={handleSubmitForm}
           onDelete={deleteRecord}

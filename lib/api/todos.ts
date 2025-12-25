@@ -26,6 +26,7 @@ export async function fetchTasks(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     })
 
     if (!response.ok) {
@@ -49,6 +50,7 @@ export async function createTask(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
 
@@ -74,6 +76,7 @@ export async function updateTask(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
 
@@ -96,6 +99,7 @@ export async function deleteTask(id: string): Promise<void> {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     })
 
     if (!response.ok) {

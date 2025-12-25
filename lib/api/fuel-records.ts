@@ -1,7 +1,6 @@
 import {
   FuelRecord,
   FuelRecordsResponse,
-  FuelRecordResponse,
   CreateFuelRecordInput,
   UpdateFuelRecordInput,
 } from '@/lib/types/fuel-record'
@@ -15,6 +14,7 @@ export async function fetchFuelRecords(
   try {
     const response = await fetch(
       `${BASE_URL}/fuel-records?vehicle_id=${vehicleId}`,
+      { credentials: 'include' },
     )
     if (!response.ok) {
       throw new Error(`Failed to fetch fuel records: ${response.statusText}`)
@@ -35,6 +35,7 @@ export async function createFuelRecord(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
     if (!response.ok) {
@@ -57,6 +58,7 @@ export async function updateFuelRecord(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
     if (!response.ok) {
@@ -73,6 +75,7 @@ export async function deleteFuelRecord(id: string): Promise<void> {
   try {
     const response = await fetch(`${BASE_URL}/fuel-records/${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     })
     if (!response.ok) {
       throw new Error(`Failed to delete fuel record: ${response.statusText}`)

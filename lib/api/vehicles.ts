@@ -1,5 +1,4 @@
 import {
-  Vehicle,
   VehiclesResponse,
   VehicleResponse,
   CreateVehicleInput,
@@ -11,7 +10,9 @@ const BASE_URL =
 
 export async function fetchVehicles(): Promise<VehiclesResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/vehicles`)
+    const response = await fetch(`${BASE_URL}/vehicles`, {
+      credentials: 'include',
+    })
     if (!response.ok) {
       throw new Error(`Failed to fetch vehicles: ${response.statusText}`)
     }
@@ -31,6 +32,7 @@ export async function createVehicle(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
     if (!response.ok) {
@@ -53,6 +55,7 @@ export async function updateVehicle(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify(input),
     })
     if (!response.ok) {
@@ -69,6 +72,7 @@ export async function deleteVehicle(id: string): Promise<void> {
   try {
     const response = await fetch(`${BASE_URL}/vehicles/${id}`, {
       method: 'DELETE',
+      credentials: 'include',
     })
     if (!response.ok) {
       throw new Error(`Failed to delete vehicle: ${response.statusText}`)

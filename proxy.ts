@@ -7,7 +7,7 @@ const protectedPaths = ['/tasks', '/vehicles', '/fuel-records']
 // 公開ルート（認証不要）
 const publicPaths = ['/auth']
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // 静的ファイルとAPIルートは除外

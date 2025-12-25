@@ -35,13 +35,15 @@ export function GoogleAuthButton() {
     <Button
       asChild
       variant="outline"
-      className="auth-button"
+      className="w-full border-slate-300 hover:bg-slate-50 hover:border-slate-400 transition-colors"
       size="lg"
-      aria-label="Continue with Google"
+      aria-label="Googleでログイン"
     >
       <a href={GOOGLE_AUTH_LOGIN_URL} rel="noopener noreferrer">
         <GoogleIcon />
-        <span className="ml-3 font-medium">Continue with Google</span>
+        <span className="ml-3 font-medium text-slate-900">
+          Googleでログイン
+        </span>
       </a>
     </Button>
   )

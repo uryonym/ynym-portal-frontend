@@ -12,46 +12,60 @@ import { GoogleAuthButton } from '@/components/GoogleAuthButton'
 
 export default function AuthPage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background transition-smooth">
-      {/* Background gradient for dark/silver aesthetic */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-muted/20 to-primary/5 -z-10" />
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30" />
 
       {/* Centered container */}
-      <div className="container relative z-10 flex min-h-screen items-center justify-center p-4 md:p-0">
-        <Card className="w-full max-w-md animate-fade-in-up border-border/30 bg-card/90 backdrop-blur-md shadow-2xl shadow-primary/10 transition-smooth hover:shadow-primary/20">
-          <CardHeader className="text-center space-y-4">
-            {/* Removed Zap icon — no icon above title */}
-            <CardTitle className="text-2xl font-bold tracking-tight text-foreground">
-              Welcome to Fast Auth
+      <div className="container relative z-10 flex min-h-screen items-center justify-center p-4">
+        <Card className="w-full max-w-md border border-slate-200 bg-white shadow-xl">
+          <CardHeader className="text-center space-y-3 pb-8">
+            <div className="mx-auto mb-2">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mx-auto">
+                <svg
+                  className="h-6 w-6 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-slate-900">
+              Ynym Portalへようこそ
             </CardTitle>
-            <CardDescription className="text-muted-foreground">
-              Sign in with your Google account to continue
+            <CardDescription className="text-slate-600 text-base">
+              Googleアカウントでログインしてください
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6 px-8 pb-8">
-            {/* Center the Google button */}
             <div className="flex justify-center">
               <GoogleAuthButton />
             </div>
 
-            <p className="text-center text-xs text-muted-foreground">
-              By continuing, we'll create an account for you and you agree to
-              our{' '}
+            <p className="text-center text-xs text-slate-500 leading-relaxed">
+              ログインすることで、
               <Link
                 href="/terms"
-                className="underline transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
               >
-                Terms of Service
-              </Link>{' '}
-              &{' '}
+                利用規約
+              </Link>
+              および
               <Link
                 href="/privacy"
-                className="underline transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
               >
-                Privacy Policy
+                プライバシーポリシー
               </Link>
-              .
+              に同意したものとみなされます。
             </p>
           </CardContent>
         </Card>

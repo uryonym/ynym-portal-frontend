@@ -5,7 +5,7 @@ import { GOOGLE_AUTH_LOGIN_URL } from '@/lib/constants'
 
 const GoogleIcon = () => (
   <svg
-    className="h-5 w-5 flex-shrink-0"
+    className="h-5 w-5 shrink-0"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

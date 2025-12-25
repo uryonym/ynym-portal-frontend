@@ -6,7 +6,6 @@ import {
   CreateVehicleInput,
   UpdateVehicleInput,
 } from '@/lib/types/vehicle'
-import { mockVehicles } from '@/lib/mocks/vehicles'
 import {
   fetchVehicles,
   createVehicle,
@@ -27,10 +26,9 @@ export function useVehicles() {
       try {
         const response = await fetchVehicles()
         setVehicles(response.data)
-      } catch {
-        console.error('Failed to load vehicles, using mock data')
-        // エラー時はモックデータにフォールバック
-        setVehicles(mockVehicles.data)
+      } catch (error) {
+        console.error('Failed to load vehicles:', error)
+        setVehicles([])
         toast.error('車両一覧の取得に失敗しました')
       } finally {
         setIsLoading(false)

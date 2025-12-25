@@ -6,7 +6,6 @@ import {
   CreateFuelRecordInput,
   UpdateFuelRecordInput,
 } from '@/lib/types/fuel-record'
-import { mockFuelRecords } from '@/lib/mocks/fuel-records'
 import {
   fetchFuelRecords,
   createFuelRecord,
@@ -62,10 +61,7 @@ export function useFuelRecords(vehicleId: string | null) {
         setRecords(data)
       } catch (error) {
         console.error('Failed to load fuel records:', error)
-        // エラー時はモックデータにフォールバック
-        setRecords(
-          mockFuelRecords.data.filter((r) => r.vehicle_id === vehicleId),
-        )
+        setRecords([])
         toast.error('燃費記録の取得に失敗しました')
       } finally {
         setIsLoading(false)

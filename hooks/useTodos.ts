@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
-import { mockTodosResponse } from '@/lib/mocks/todos'
 import {
   fetchTasks,
   createTask,
@@ -50,15 +49,9 @@ export function useTodos() {
     try {
       const response = await fetchTasks(currentFilter)
       setTodos(response.data)
-    } catch {
-      console.error('Failed to load tasks, using mock data')
-      // エラー時はモックデータにフォールバック
-      const filtered = mockTodosResponse.data.filter((t) => {
-        if (currentFilter === 'active') return !t.is_completed
-        if (currentFilter === 'completed') return t.is_completed
-        return true
-      })
-      setTodos(filtered)
+    } catch (error) {
+      console.error('Failed to load tasks:', error)
+      setTodos([])
       toast.error('タスク一覧の取得に失敗しました')
     } finally {
       setIsLoading(false)

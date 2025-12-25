@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/AppSidebar'
+import { AuthProvider } from '@/providers/AuthProvider'
 import Header from '@/components/Header'
 
 import './globals.css'
@@ -26,13 +27,15 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="font-sans">
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <Header />
-            {children}
-          </SidebarInset>
-        </SidebarProvider>
+        <AuthProvider>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <Header />
+              {children}
+            </SidebarInset>
+          </SidebarProvider>
+        </AuthProvider>
       </body>
     </html>
   )

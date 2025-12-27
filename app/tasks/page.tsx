@@ -6,6 +6,7 @@ import { TodoDialog } from '@/components/TodoDialog'
 import { Toaster } from '@/components/ui/sonner'
 import { useTodos } from '@/hooks/useTodos'
 import { CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function TasksPage() {
   const {
@@ -43,29 +44,31 @@ export default function TasksPage() {
   }
 
   return (
-    <>
-      <main className="flex-1 p-4 sm:p-6">
-        <TodoList
-          todos={todos}
-          onToggleComplete={toggleComplete}
-          onEdit={handleEditTodo}
-          onAddNew={handleOpenDialog}
-          filter={filter}
-          onFilterChange={setFilter}
+    <ProtectedRoute>
+      <>
+        <main className="flex-1 p-4 sm:p-6">
+          <TodoList
+            todos={todos}
+            onToggleComplete={toggleComplete}
+            onEdit={handleEditTodo}
+            onAddNew={handleOpenDialog}
+            filter={filter}
+            onFilterChange={setFilter}
+            isLoading={isLoading}
+          />
+        </main>
+
+        <TodoDialog
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          initialData={editingTodo}
+          onSubmit={handleSubmitForm}
+          onDelete={deleteTodo}
           isLoading={isLoading}
         />
-      </main>
 
-      <TodoDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        initialData={editingTodo}
-        onSubmit={handleSubmitForm}
-        onDelete={deleteTodo}
-        isLoading={isLoading}
-      />
-
-      <Toaster />
-    </>
+        <Toaster />
+      </>
+    </ProtectedRoute>
   )
 }

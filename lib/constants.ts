@@ -1,5 +1,5 @@
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
 
 // ---  Auth URLs from API contract ---
 export const GOOGLE_AUTH_LOGIN_URL = `${API_BASE_URL}/api/auth/google/login`

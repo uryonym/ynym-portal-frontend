@@ -5,12 +5,11 @@ import {
   UpdateVehicleInput,
 } from '@/lib/types/vehicle'
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
 
 export async function fetchVehicles(): Promise<VehiclesResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/vehicles`, {
+    const response = await fetch(`${BASE_URL}/api/vehicles`, {
       credentials: 'include',
     })
     if (!response.ok) {
@@ -27,7 +26,7 @@ export async function createVehicle(
   input: CreateVehicleInput,
 ): Promise<VehicleResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/vehicles`, {
+    const response = await fetch(`${BASE_URL}/api/vehicles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,7 +49,7 @@ export async function updateVehicle(
   input: UpdateVehicleInput,
 ): Promise<VehicleResponse> {
   try {
-    const response = await fetch(`${BASE_URL}/vehicles/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/vehicles/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +69,7 @@ export async function updateVehicle(
 
 export async function deleteVehicle(id: string): Promise<void> {
   try {
-    const response = await fetch(`${BASE_URL}/vehicles/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/vehicles/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     })

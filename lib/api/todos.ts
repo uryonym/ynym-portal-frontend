@@ -6,7 +6,7 @@ import {
 } from '../types/todo'
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
 
 export type TaskFilter = 'all' | 'active' | 'completed'
 
@@ -14,7 +14,7 @@ export async function fetchTasks(
   filter: TaskFilter = 'active',
 ): Promise<TodosResponse> {
   try {
-    let url = `${API_BASE_URL}/tasks`
+    let url = `${API_BASE_URL}/api/tasks`
     if (filter === 'active') {
       url += '?is_completed=false'
     } else if (filter === 'completed') {
@@ -45,7 +45,7 @@ export async function createTask(
   input: CreateTodoInput,
 ): Promise<TodoResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks`, {
+    const response = await fetch(`${API_BASE_URL}/api/tasks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export async function updateTask(
   input: UpdateTodoInput,
 ): Promise<TodoResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export async function updateTask(
 
 export async function deleteTask(id: string): Promise<void> {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

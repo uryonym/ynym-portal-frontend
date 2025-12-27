@@ -5,15 +5,14 @@ import {
   UpdateFuelRecordInput,
 } from '@/lib/types/fuel-record'
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api'
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'
 
 export async function fetchFuelRecords(
   vehicleId: string,
 ): Promise<FuelRecordsResponse> {
   try {
     const response = await fetch(
-      `${BASE_URL}/fuel-records?vehicle_id=${vehicleId}`,
+      `${BASE_URL}/api/fuel-records?vehicle_id=${vehicleId}`,
       { credentials: 'include' },
     )
     if (!response.ok) {
@@ -30,7 +29,7 @@ export async function createFuelRecord(
   input: CreateFuelRecordInput,
 ): Promise<FuelRecord> {
   try {
-    const response = await fetch(`${BASE_URL}/fuel-records`, {
+    const response = await fetch(`${BASE_URL}/api/fuel-records`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +52,7 @@ export async function updateFuelRecord(
   input: UpdateFuelRecordInput,
 ): Promise<FuelRecord> {
   try {
-    const response = await fetch(`${BASE_URL}/fuel-records/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/fuel-records/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -73,7 +72,7 @@ export async function updateFuelRecord(
 
 export async function deleteFuelRecord(id: string): Promise<void> {
   try {
-    const response = await fetch(`${BASE_URL}/fuel-records/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/fuel-records/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     })

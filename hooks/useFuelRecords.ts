@@ -37,8 +37,7 @@ export function useFuelRecords(vehicleId: string | null) {
     if (!vehicleId) return
     try {
       const response = await fetchFuelRecords(vehicleId)
-      const data = Array.isArray(response) ? response : response.data || []
-      setRecords(data)
+      setRecords(response.data)
     } catch (error) {
       console.error('Failed to reload fuel records:', error)
       toast.error('燃費記録の再取得に失敗しました')
@@ -56,9 +55,7 @@ export function useFuelRecords(vehicleId: string | null) {
       setIsLoading(true)
       try {
         const response = await fetchFuelRecords(vehicleId)
-        // レスポンスの構造に対応（配列 or data プロパティ）
-        const data = Array.isArray(response) ? response : response.data || []
-        setRecords(data)
+        setRecords(response.data)
       } catch (error) {
         console.error('Failed to load fuel records:', error)
         setRecords([])

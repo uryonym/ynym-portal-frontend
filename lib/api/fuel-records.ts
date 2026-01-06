@@ -13,7 +13,9 @@ export async function fetchFuelRecords(
   try {
     const response = await fetch(
       `${BASE_URL}/api/fuel-records?vehicle_id=${vehicleId}`,
-      { credentials: 'include' },
+      {
+        credentials: 'include',
+      },
     )
     if (!response.ok) {
       throw new Error(`Failed to fetch fuel records: ${response.statusText}`)

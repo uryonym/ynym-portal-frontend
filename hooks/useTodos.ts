@@ -43,6 +43,17 @@ export function useTodos() {
   // ソート済みのtodosを返す
   const sortedTodos = useMemo(() => sortTodos(todos), [todos])
 
+  // データを再取得する共通関数
+  const reloadTodos = useCallback(async () => {
+    try {
+      const response = await fetchTasks(filter)
+      setTodos(response.data)
+    } catch (error) {
+      console.error('Failed to reload tasks:', error)
+      toast.error('タスクの再取得に失敗しました')
+    }
+  }, [filter])
+
   // フィルタ変更時にタスク一覧を取得
   const loadTasks = useCallback(async (currentFilter: TaskFilter) => {
     setIsLoading(true)
@@ -64,51 +75,61 @@ export function useTodos() {
   }, [filter, loadTasks])
 
   // 新規追加
-  const addTodo = useCallback(async (data: CreateTodoInput) => {
-    setIsLoading(true)
-    try {
-      const response = await createTask(data)
-      setTodos((prev) => [response.data, ...prev])
-      toast.success('タスクを作成しました')
-    } catch (error) {
-      console.error('Failed to create task:', error)
-      toast.error('タスクの作成に失敗しました')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const addTodo = useCallback(
+    async (data: CreateTodoInput) => {
+      setIsLoading(true)
+      try {
+        await createTask(data)
+        // データを再取得して最新データを取得
+        await reloadTodos()
+        toast.success('タスクを作成しました')
+      } catch (error) {
+        console.error('Failed to create task:', error)
+        toast.error('タスクの作成に失敗しました')
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [reloadTodos],
+  )
 
   // 更新
-  const updateTodo = useCallback(async (id: string, data: UpdateTodoInput) => {
-    setIsLoading(true)
-    try {
-      const response = await updateTask(id, data)
-      setTodos((prev) =>
-        prev.map((todo) => (todo.id === id ? response.data : todo)),
-      )
-      toast.success('タスクを更新しました')
-    } catch (error) {
-      console.error('Failed to update task:', error)
-      toast.error('タスクの更新に失敗しました')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const updateTodo = useCallback(
+    async (id: string, data: UpdateTodoInput) => {
+      setIsLoading(true)
+      try {
+        await updateTask(id, data)
+        // データを再取得して最新データを取得
+        await reloadTodos()
+        toast.success('タスクを更新しました')
+      } catch (error) {
+        console.error('Failed to update task:', error)
+        toast.error('タスクの更新に失敗しました')
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [reloadTodos],
+  )
 
   // 削除
-  const deleteTodo = useCallback(async (id: string) => {
-    setIsLoading(true)
-    try {
-      await deleteTask(id)
-      setTodos((prev) => prev.filter((todo) => todo.id !== id))
-      toast.success('タスクを削除しました')
-    } catch (error) {
-      console.error('Failed to delete task:', error)
-      toast.error('タスクの削除に失敗しました')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const deleteTodo = useCallback(
+    async (id: string) => {
+      setIsLoading(true)
+      try {
+        await deleteTask(id)
+        // データを再取得して最新データを取得
+        await reloadTodos()
+        toast.success('タスクを削除しました')
+      } catch (error) {
+        console.error('Failed to delete task:', error)
+        toast.error('タスクの削除に失敗しました')
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [reloadTodos],
+  )
 
   // 完了状態をトグル
   const toggleComplete = useCallback(

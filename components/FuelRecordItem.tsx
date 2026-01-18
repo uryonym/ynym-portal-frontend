@@ -12,6 +12,8 @@ interface FuelRecordItemProps {
 }
 
 export function FuelRecordItem({ record, onEdit }: FuelRecordItemProps) {
+  // バックエンドから返される UTC 文字列を JST に変換して表示
+  // new Date() は "2024-01-15T05:30:00Z" を自動的にブラウザのローカルタイムゾーン（JST）に変換
   const refuelDate = format(new Date(record.refuel_datetime), 'M月d日 HH:mm', {
     locale: ja,
   })

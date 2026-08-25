@@ -1,6 +1,10 @@
 'use client'
 
-import { FuelRecord, CreateFuelRecordInput, UpdateFuelRecordInput } from '@/lib/types/fuel-record'
+import {
+  FuelRecord,
+  CreateFuelRecordInput,
+  UpdateFuelRecordInput,
+} from '@/lib/types/fuel-record'
 import {
   Dialog,
   DialogContent,
@@ -31,7 +35,9 @@ export function FuelRecordDialog({
   const isEditMode = !!initialData
   const title = isEditMode ? '記録を編集' : '新しい記録を作成'
 
-  const handleSubmit = (data: CreateFuelRecordInput | UpdateFuelRecordInput) => {
+  const handleSubmit = (
+    data: CreateFuelRecordInput | UpdateFuelRecordInput,
+  ) => {
     onSubmit(data)
   }
 

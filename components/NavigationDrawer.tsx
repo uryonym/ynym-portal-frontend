@@ -1,25 +1,25 @@
-'use client';
+'use client'
 
-import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { Menu } from 'lucide-react'
+import { useState } from 'react'
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-} from '@/components/ui/drawer';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/drawer'
+import { Button } from '@/components/ui/button'
 
 export default function NavigationDrawer() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const menuItems = [
     { label: 'ホーム', href: '/' },
     { label: 'ダッシュボード', href: '/dashboard' },
     { label: 'ドキュメント', href: '/docs' },
     { label: '設定', href: '/settings' },
-  ];
+  ]
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -52,5 +52,5 @@ export default function NavigationDrawer() {
         </nav>
       </DrawerContent>
     </Drawer>
-  );
+  )
 }

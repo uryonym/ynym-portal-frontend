@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { useVehicles } from '@/hooks/useVehicles'
 import { VehicleList } from '@/components/VehicleList'
 import { VehicleDialog } from '@/components/VehicleDialog'
-import { CreateVehicleInput, UpdateVehicleInput } from '@/lib/types/vehicle'
+import {
+  Vehicle,
+  CreateVehicleInput,
+  UpdateVehicleInput,
+} from '@/lib/types/vehicle'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function VehiclesPage() {
@@ -24,7 +28,7 @@ export default function VehiclesPage() {
     setIsDialogOpen(true)
   }
 
-  const handleEditVehicle = (vehicleToEdit: any) => {
+  const handleEditVehicle = (vehicleToEdit: Vehicle) => {
     setEditingVehicle(vehicleToEdit)
     setIsDialogOpen(true)
   }

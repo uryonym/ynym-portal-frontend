@@ -5,7 +5,7 @@ import { TodoList } from '@/components/TodoList'
 import { TodoDialog } from '@/components/TodoDialog'
 import { Toaster } from '@/components/ui/sonner'
 import { useTodos } from '@/hooks/useTodos'
-import { CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
+import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function TasksPage() {
@@ -29,7 +29,7 @@ export default function TasksPage() {
     setIsDialogOpen(true)
   }
 
-  const handleEditTodo = (todoToEdit: any) => {
+  const handleEditTodo = (todoToEdit: Todo) => {
     setEditingTodo(todoToEdit)
     setIsDialogOpen(true)
   }

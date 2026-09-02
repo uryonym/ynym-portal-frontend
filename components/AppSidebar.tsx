@@ -14,6 +14,7 @@ import {
 import { Home, CalendarCheck, Car, Droplet, User } from 'lucide-react'
 import { useAuth } from '@/providers/AuthProvider'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const menuItems = [
   {
@@ -55,10 +56,10 @@ export function AppSidebar() {
                     size="lg"
                     className="h-12 text-base"
                   >
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon className="h-6 w-6" />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

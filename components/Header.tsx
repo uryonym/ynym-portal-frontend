@@ -10,8 +10,6 @@ import Image from 'next/image'
 export default function Header() {
   const { user, logout, isLoading } = useAuth()
 
-  console.log('Header render:', { user, isLoading })
-
   return (
     <header className="sticky top-0 z-40 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 gap-4">
       <div className="flex items-center gap-4">

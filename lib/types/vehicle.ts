@@ -28,7 +28,7 @@ export interface CreateVehicleInput {
   model: string
   year: number
   number: string
-  tank_capacity: number
+  tank_capacity?: number
 }
 
 export interface UpdateVehicleInput {

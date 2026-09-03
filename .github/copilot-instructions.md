@@ -8,5 +8,5 @@ When generating git commit messages:
   - fix: バグ修正
   - refactor: リファクタリング
   - docs: ドキュメント
-- メッセージは日本語で記述すること
+- メッセージは必ず**日本語**で記述すること
 - 50文字以内で簡潔にまとめること

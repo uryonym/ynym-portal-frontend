@@ -1,44 +1,50 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { User } from '@/lib/types/user'
-import { USERS_ME_URL } from '@/lib/constants'
-import { logoutUser } from '@/lib/api/users'
+import { fetchCurrentUser, logoutUser } from '@/lib/api/users'
 
 export function useUser() {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const res = await fetch(USERS_ME_URL, { credentials: 'include' })
-      if (res.ok) {
-        const userData = await res.json()
-        setUser(userData)
-      } else if (res.status === 401) {
-        setUser(null)
-      } else {
-        setError('Failed to fetch user')
+  useEffect(() => {
+    let ignore = false
+
+    async function load() {
+      try {
+        const userData = await fetchCurrentUser()
+        if (!ignore) {
+          setUser(userData)
+        }
+      } catch {
+        if (!ignore) {
+          setError('Failed to fetch user')
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false)
+        }
       }
-    } catch (err) {
-      setError('Network error')
-    } finally {
-      setIsLoading(false)
+    }
+
+    load()
+
+    return () => {
+      ignore = true
     }
   }, [])
-
-  useEffect(() => {
-    fetchUser()
-  }, [fetchUser])
 
   const logout = useCallback(async () => {
     try {
       await logoutUser()
       setUser(null)
-      window.location.href = '/'
+      router.push('/')
     } catch (error) {
       console.error('Logout failed:', error)
     }
-  }, [])
+  }, [router])
 
   return { user, isLoading, error, logout }
 }

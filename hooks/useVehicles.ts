@@ -19,44 +19,54 @@ export function useVehicles() {
   const [isLoading, setIsLoading] = useState(true)
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null)
 
-  // データを再取得する共通関数
-  const reloadVehicles = useCallback(async () => {
+  const refreshVehicles = useCallback(async () => {
+    setIsLoading(true)
     try {
       const response = await fetchVehicles()
       setVehicles(response.data)
     } catch (error) {
       console.error('Failed to reload vehicles:', error)
-      toast.error('車両の再取得に失敗しました')
+      toast.error('車両一覧の取得に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
-  // 初期化時に車両一覧を取得
   useEffect(() => {
-    const loadVehicles = async () => {
-      setIsLoading(true)
+    let ignore = false
+
+    async function load() {
       try {
         const response = await fetchVehicles()
-        setVehicles(response.data)
+        if (!ignore) {
+          setVehicles(response.data)
+        }
       } catch (error) {
         console.error('Failed to load vehicles:', error)
-        setVehicles([])
-        toast.error('車両一覧の取得に失敗しました')
+        if (!ignore) {
+          setVehicles([])
+          toast.error('車両一覧の取得に失敗しました')
+        }
       } finally {
-        setIsLoading(false)
+        if (!ignore) {
+          setIsLoading(false)
+        }
       }
     }
 
-    loadVehicles()
+    load()
+
+    return () => {
+      ignore = true
+    }
   }, [])
 
-  // 新規追加
   const addVehicle = useCallback(
     async (data: CreateVehicleInput) => {
       setIsLoading(true)
       try {
         await createVehicle(data)
-        // データを再取得して最新データを取得
-        await reloadVehicles()
+        await refreshVehicles()
         toast.success('車両を追加しました')
       } catch (error) {
         console.error('Failed to create vehicle:', error)
@@ -65,17 +75,15 @@ export function useVehicles() {
         setIsLoading(false)
       }
     },
-    [reloadVehicles],
+    [refreshVehicles],
   )
 
-  // 更新
   const updateVehicle = useCallback(
     async (id: string, data: UpdateVehicleInput) => {
       setIsLoading(true)
       try {
         await updateVehicleAPI(id, data)
-        // データを再取得して最新データを取得
-        await reloadVehicles()
+        await refreshVehicles()
         toast.success('車両を更新しました')
       } catch (error) {
         console.error('Failed to update vehicle:', error)
@@ -84,17 +92,15 @@ export function useVehicles() {
         setIsLoading(false)
       }
     },
-    [reloadVehicles],
+    [refreshVehicles],
   )
 
-  // 削除
   const deleteVehicle = useCallback(
     async (id: string) => {
       setIsLoading(true)
       try {
         await deleteVehicleAPI(id)
-        // データを再取得して最新データを取得
-        await reloadVehicles()
+        await refreshVehicles()
         toast.success('車両を削除しました')
       } catch (error) {
         console.error('Failed to delete vehicle:', error)
@@ -103,7 +109,7 @@ export function useVehicles() {
         setIsLoading(false)
       }
     },
-    [reloadVehicles],
+    [refreshVehicles],
   )
 
   return {

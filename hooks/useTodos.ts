@@ -17,19 +17,16 @@ import { toast } from 'sonner'
 // 3. 作成日時の古い順
 function sortTodos(todos: Todo[]): Todo[] {
   return [...todos].sort((a, b) => {
-    // 1. 完了状態で比較（未完了が先）
     if (a.is_completed !== b.is_completed) {
       return a.is_completed ? 1 : -1
     }
 
-    // 2. 期日で比較（期日なしは最後）
     if (a.due_date !== b.due_date) {
       if (!a.due_date) return 1
       if (!b.due_date) return -1
       return new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
     }
 
-    // 3. 作成日時の古い順
     return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   })
 }
@@ -40,22 +37,10 @@ export function useTodos() {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
   const [filter, setFilter] = useState<TaskFilter>('active')
 
-  // ソート済みのtodosを返す
   const sortedTodos = useMemo(() => sortTodos(todos), [todos])
 
-  // データを再取得する共通関数
-  const reloadTodos = useCallback(async () => {
-    try {
-      const response = await fetchTasks(filter)
-      setTodos(response.data)
-    } catch (error) {
-      console.error('Failed to reload tasks:', error)
-      toast.error('タスクの再取得に失敗しました')
-    }
-  }, [filter])
-
-  // フィルタ変更時にタスク一覧を取得
-  const loadTasks = useCallback(async (currentFilter: TaskFilter) => {
+  // データ再取得用の内部関数
+  const refreshTasks = useCallback(async (currentFilter: TaskFilter) => {
     setIsLoading(true)
     try {
       const response = await fetchTasks(currentFilter)
@@ -69,10 +54,39 @@ export function useTodos() {
     }
   }, [])
 
-  // 初期化時・フィルタ変更時にタスク一覧を取得
   useEffect(() => {
-    loadTasks(filter)
-  }, [filter, loadTasks])
+    let ignore = false
+
+    async function load() {
+      try {
+        const response = await fetchTasks(filter)
+        if (!ignore) {
+          setTodos(response.data)
+        }
+      } catch (error) {
+        console.error('Failed to load tasks:', error)
+        if (!ignore) {
+          setTodos([])
+          toast.error('タスク一覧の取得に失敗しました')
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    load()
+
+    return () => {
+      ignore = true
+    }
+  }, [filter])
+
+  const handleFilterChange = useCallback((newFilter: TaskFilter) => {
+    setIsLoading(true)
+    setFilter(newFilter)
+  }, [])
 
   // 新規追加
   const addTodo = useCallback(
@@ -80,8 +94,7 @@ export function useTodos() {
       setIsLoading(true)
       try {
         await createTask(data)
-        // データを再取得して最新データを取得
-        await reloadTodos()
+        await refreshTasks(filter)
         toast.success('タスクを作成しました')
       } catch (error) {
         console.error('Failed to create task:', error)
@@ -90,7 +103,7 @@ export function useTodos() {
         setIsLoading(false)
       }
     },
-    [reloadTodos],
+    [filter, refreshTasks],
   )
 
   // 更新
@@ -99,8 +112,7 @@ export function useTodos() {
       setIsLoading(true)
       try {
         await updateTask(id, data)
-        // データを再取得して最新データを取得
-        await reloadTodos()
+        await refreshTasks(filter)
         toast.success('タスクを更新しました')
       } catch (error) {
         console.error('Failed to update task:', error)
@@ -109,7 +121,7 @@ export function useTodos() {
         setIsLoading(false)
       }
     },
-    [reloadTodos],
+    [filter, refreshTasks],
   )
 
   // 削除
@@ -118,8 +130,7 @@ export function useTodos() {
       setIsLoading(true)
       try {
         await deleteTask(id)
-        // データを再取得して最新データを取得
-        await reloadTodos()
+        await refreshTasks(filter)
         toast.success('タスクを削除しました')
       } catch (error) {
         console.error('Failed to delete task:', error)
@@ -128,7 +139,7 @@ export function useTodos() {
         setIsLoading(false)
       }
     },
-    [reloadTodos],
+    [filter, refreshTasks],
   )
 
   // 完了状態をトグル
@@ -152,6 +163,6 @@ export function useTodos() {
     deleteTodo,
     toggleComplete,
     filter,
-    setFilter,
+    setFilter: handleFilterChange,
   }
 }

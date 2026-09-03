@@ -29,53 +29,63 @@ export function useFuelRecords(vehicleId: string | null) {
   const [isLoading, setIsLoading] = useState(false)
   const [editingRecord, setEditingRecord] = useState<FuelRecord | null>(null)
 
-  // ソート済みのrecordsを返す
   const sortedRecords = useMemo(() => sortFuelRecords(records), [records])
 
-  // データを再取得する共通関数
-  const reloadRecords = useCallback(async () => {
+  const refreshRecords = useCallback(async () => {
     if (!vehicleId) return
+    setIsLoading(true)
     try {
       const response = await fetchFuelRecords(vehicleId)
       setRecords(response.data)
     } catch (error) {
       console.error('Failed to reload fuel records:', error)
       toast.error('燃費記録の再取得に失敗しました')
+    } finally {
+      setIsLoading(false)
     }
   }, [vehicleId])
 
-  // 車両IDが変更されたときに燃費記録を取得
   useEffect(() => {
-    if (!vehicleId) {
-      setRecords([])
-      return
-    }
+    let ignore = false
 
-    const loadRecords = async () => {
-      setIsLoading(true)
+    async function load() {
+      if (!vehicleId) {
+        setRecords([])
+        setIsLoading(false)
+        return
+      }
+
       try {
         const response = await fetchFuelRecords(vehicleId)
-        setRecords(response.data)
+        if (!ignore) {
+          setRecords(response.data)
+        }
       } catch (error) {
         console.error('Failed to load fuel records:', error)
-        setRecords([])
-        toast.error('燃費記録の取得に失敗しました')
+        if (!ignore) {
+          setRecords([])
+          toast.error('燃費記録の取得に失敗しました')
+        }
       } finally {
-        setIsLoading(false)
+        if (!ignore) {
+          setIsLoading(false)
+        }
       }
     }
 
-    loadRecords()
+    load()
+
+    return () => {
+      ignore = true
+    }
   }, [vehicleId])
 
-  // 新規追加
   const addRecord = useCallback(
     async (data: CreateFuelRecordInput) => {
       setIsLoading(true)
       try {
         await createFuelRecord(data)
-        // データを再取得して計算済みフィールドを含む最新データを取得
-        await reloadRecords()
+        await refreshRecords()
         toast.success('燃費記録を追加しました')
       } catch (error) {
         console.error('Failed to create fuel record:', error)
@@ -84,17 +94,15 @@ export function useFuelRecords(vehicleId: string | null) {
         setIsLoading(false)
       }
     },
-    [reloadRecords],
+    [refreshRecords],
   )
 
-  // 更新
   const updateRecord = useCallback(
     async (id: string, data: UpdateFuelRecordInput) => {
       setIsLoading(true)
       try {
         await updateFuelRecordAPI(id, data)
-        // データを再取得して計算済みフィールドを含む最新データを取得
-        await reloadRecords()
+        await refreshRecords()
         toast.success('燃費記録を更新しました')
       } catch (error) {
         console.error('Failed to update fuel record:', error)
@@ -103,17 +111,15 @@ export function useFuelRecords(vehicleId: string | null) {
         setIsLoading(false)
       }
     },
-    [reloadRecords],
+    [refreshRecords],
   )
 
-  // 削除
   const deleteRecord = useCallback(
     async (id: string) => {
       setIsLoading(true)
       try {
         await deleteFuelRecordAPI(id)
-        // データを再取得して計算済みフィールドを含む最新データを取得
-        await reloadRecords()
+        await refreshRecords()
         toast.success('燃費記録を削除しました')
       } catch (error) {
         console.error('Failed to delete fuel record:', error)
@@ -122,7 +128,7 @@ export function useFuelRecords(vehicleId: string | null) {
         setIsLoading(false)
       }
     },
-    [reloadRecords],
+    [refreshRecords],
   )
 
   return {

@@ -1,3 +1,5 @@
+常に日本語で出力してください。
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

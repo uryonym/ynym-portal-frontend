@@ -5,7 +5,6 @@ import { TodoList } from '@/components/TodoList'
 import { TodoDialog } from '@/components/TodoDialog'
 import { useTodos } from '@/hooks/useTodos'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function TasksPage() {
   const {
@@ -43,29 +42,27 @@ export default function TasksPage() {
   }
 
   return (
-    <ProtectedRoute>
-      <>
-        <main className="flex-1 p-4 sm:p-6">
-          <TodoList
-            todos={todos}
-            onToggleComplete={toggleComplete}
-            onEdit={handleEditTodo}
-            onAddNew={handleOpenDialog}
-            filter={filter}
-            onFilterChange={setFilter}
-            isLoading={isLoading}
-          />
-        </main>
-
-        <TodoDialog
-          open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          initialData={editingTodo}
-          onSubmit={handleSubmitForm}
-          onDelete={deleteTodo}
+    <>
+      <main className="flex-1 p-4 sm:p-6">
+        <TodoList
+          todos={todos}
+          onToggleComplete={toggleComplete}
+          onEdit={handleEditTodo}
+          onAddNew={handleOpenDialog}
+          filter={filter}
+          onFilterChange={setFilter}
           isLoading={isLoading}
         />
-      </>
-    </ProtectedRoute>
+      </main>
+
+      <TodoDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        initialData={editingTodo}
+        onSubmit={handleSubmitForm}
+        onDelete={deleteTodo}
+        isLoading={isLoading}
+      />
+    </>
   )
 }

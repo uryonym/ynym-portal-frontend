@@ -1,30 +1,19 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
-export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // 静的ファイルとAPIルートは除外
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
-  ) {
-    return NextResponse.next()
-  }
-
-  // すべてのリクエストを通過させ、クライアント側で認証チェック
+/**
+ * Next.js 16 Proxy
+ * Note: 現在はクライアント側の AuthProvider / ProtectedRoute で認証を制御しています。
+ * 将来的にセッション Cookie を用いたサーバーサイドでの早期リダイレクトを行う場合はここに実装します。
+ */
+export async function proxy() {
   return NextResponse.next()
 }
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * 静的アセット（_next, favicon, 拡張子付きファイル）を除外
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 }

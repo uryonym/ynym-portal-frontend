@@ -9,7 +9,6 @@ import {
   CreateVehicleInput,
   UpdateVehicleInput,
 } from '@/lib/types/vehicle'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function VehiclesPage() {
   const {
@@ -43,28 +42,26 @@ export default function VehiclesPage() {
   }
 
   return (
-    <ProtectedRoute>
-      <>
-        <main className="flex-1 p-4 sm:p-6">
-          <div className="max-w-2xl mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">車両管理</h1>
-            <VehicleList
-              vehicles={vehicles}
-              onEdit={handleEditVehicle}
-              onAddNew={handleAddNew}
-            />
-          </div>
-        </main>
+    <>
+      <main className="flex-1 p-4 sm:p-6">
+        <div className="max-w-2xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">車両管理</h1>
+          <VehicleList
+            vehicles={vehicles}
+            onEdit={handleEditVehicle}
+            onAddNew={handleAddNew}
+          />
+        </div>
+      </main>
 
-        <VehicleDialog
-          open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          initialData={editingVehicle}
-          onSubmit={handleSubmitForm}
-          onDelete={deleteVehicle}
-          isLoading={isLoading}
-        />
-      </>
-    </ProtectedRoute>
+      <VehicleDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        initialData={editingVehicle}
+        onSubmit={handleSubmitForm}
+        onDelete={deleteVehicle}
+        isLoading={isLoading}
+      />
+    </>
   )
 }

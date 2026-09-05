@@ -12,7 +12,6 @@ import {
   FuelRecord,
 } from '@/lib/types/fuel-record'
 import { Button } from '@/components/ui/button'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 export default function FuelRecordsPage() {
   const { vehicles, isLoading: vehiclesLoading } = useVehicles()
@@ -67,7 +66,7 @@ export default function FuelRecordsPage() {
   }
 
   return (
-    <ProtectedRoute>
+    <>
       <main className="flex-1 p-4 sm:p-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">燃費管理</h1>
@@ -125,6 +124,6 @@ export default function FuelRecordsPage() {
           isLoading={isLoading}
         />
       )}
-    </ProtectedRoute>
+    </>
   )
 }

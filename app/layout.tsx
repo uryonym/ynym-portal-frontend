@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/AppSidebar'
 import { AuthProvider } from '@/providers/AuthProvider'
-import Header from '@/components/Header'
 import { Toaster } from '@/components/ui/sonner'
 
 import './globals.css'
@@ -33,13 +30,7 @@ export default function RootLayout({
     <html lang="ja" className={cn('font-sans', inter.variable)}>
       <body className="font-sans">
         <AuthProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <Header />
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          {children}
           <Toaster />
         </AuthProvider>
       </body>

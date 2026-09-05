@@ -9,6 +9,21 @@ export function useUser() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const refetchUser = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const userData = await fetchCurrentUser()
+      setUser(userData)
+      return userData
+    } catch {
+      setError('Failed to fetch user')
+      return null
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     let ignore = false
 
@@ -46,5 +61,5 @@ export function useUser() {
     }
   }, [router])
 
-  return { user, isLoading, error, logout }
+  return { user, isLoading, error, logout, refetchUser }
 }

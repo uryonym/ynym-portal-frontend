@@ -54,14 +54,23 @@ export function VehicleForm({
     },
   })
 
-  // 編集時: 初期化後にフォーカスを外す
+  // initialData が変わった場合（新規追加・別アイテムの編集など）にフォームをリセット
   useEffect(() => {
+    form.reset({
+      name: initialData?.name ?? '',
+      maker: initialData?.maker ?? '',
+      model: initialData?.model ?? '',
+      year: initialData?.year?.toString() ?? '',
+      number: initialData?.number ?? '',
+      tank_capacity: initialData?.tank_capacity?.toString() ?? '',
+    })
+
     if (initialData && nameInputRef.current) {
       setTimeout(() => {
         nameInputRef.current?.blur()
       }, 0)
     }
-  }, [initialData])
+  }, [initialData, form])
 
   const handleFormSubmit = (values: VehicleFormValues) => {
     const data: CreateVehicleInput = {

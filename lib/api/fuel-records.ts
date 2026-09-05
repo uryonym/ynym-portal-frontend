@@ -1,5 +1,5 @@
 import {
-  FuelRecord,
+  FuelRecordResponse,
   FuelRecordsResponse,
   CreateFuelRecordInput,
   UpdateFuelRecordInput,
@@ -16,15 +16,15 @@ export async function fetchFuelRecords(
 
 export async function createFuelRecord(
   input: CreateFuelRecordInput,
-): Promise<FuelRecord> {
-  return apiClient.post<FuelRecord>('/api/fuel-records', input)
+): Promise<FuelRecordResponse> {
+  return apiClient.post<FuelRecordResponse>('/api/fuel-records', input)
 }
 
 export async function updateFuelRecord(
   id: string,
   input: UpdateFuelRecordInput,
-): Promise<FuelRecord> {
-  return apiClient.put<FuelRecord>(`/api/fuel-records/${id}`, input)
+): Promise<FuelRecordResponse> {
+  return apiClient.put<FuelRecordResponse>(`/api/fuel-records/${id}`, input)
 }
 
 export async function deleteFuelRecord(id: string): Promise<void> {

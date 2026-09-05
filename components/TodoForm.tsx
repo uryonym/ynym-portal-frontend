@@ -53,14 +53,20 @@ export function TodoForm({
     },
   })
 
-  // 編集時: 初期化後にフォーカスを外す
+  // initialData が変わった場合（新規追加・別アイテムの編集など）にフォームをリセット
   useEffect(() => {
+    form.reset({
+      title: initialData?.title ?? '',
+      description: initialData?.description ?? '',
+      due_date: initialData?.due_date ?? '',
+    })
+
     if (initialData && titleInputRef.current) {
       setTimeout(() => {
         titleInputRef.current?.blur()
       }, 0)
     }
-  }, [initialData])
+  }, [initialData, form])
 
   const handleFormSubmit = (values: TodoFormValues) => {
     onSubmit({

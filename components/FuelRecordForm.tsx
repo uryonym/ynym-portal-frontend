@@ -46,10 +46,10 @@ export function FuelRecordForm({
 }: FuelRecordFormProps) {
   const refuelRef = useRef<HTMLInputElement>(null)
 
-  // 編集時: バックエンドから返される UTC 文字列を JST datetime-local 用に変換
-  const getInitialDatetime = () => {
-    if (!initialData?.refuel_datetime) return ''
-    const date = new Date(initialData.refuel_datetime)
+  // バックエンドから返される UTC 文字列を JST datetime-local 用に変換
+  const formatDatetimeForInput = (datetimeStr?: string | null) => {
+    if (!datetimeStr) return ''
+    const date = new Date(datetimeStr)
     return format(date, "yyyy-MM-dd'T'HH:mm")
   }
 
@@ -58,7 +58,7 @@ export function FuelRecordForm({
       fuelRecordFormSchema,
     ) as Resolver<FuelRecordFormValues>,
     defaultValues: {
-      refuel_datetime: getInitialDatetime(),
+      refuel_datetime: formatDatetimeForInput(initialData?.refuel_datetime),
       total_mileage: initialData?.total_mileage?.toString() ?? '',
       fuel_type: initialData?.fuel_type ?? '',
       unit_price: initialData?.unit_price?.toString() ?? '',
@@ -68,14 +68,24 @@ export function FuelRecordForm({
     },
   })
 
-  // 編集時: フォーカスを外す
+  // initialData が変わった場合（新規追加・別アイテムの編集など）にフォームをリセット
   useEffect(() => {
+    form.reset({
+      refuel_datetime: formatDatetimeForInput(initialData?.refuel_datetime),
+      total_mileage: initialData?.total_mileage?.toString() ?? '',
+      fuel_type: initialData?.fuel_type ?? '',
+      unit_price: initialData?.unit_price?.toString() ?? '',
+      total_cost: initialData?.total_cost?.toString() ?? '',
+      is_full_tank: initialData?.is_full_tank ?? false,
+      gas_station_name: initialData?.gas_station_name ?? '',
+    })
+
     if (initialData && refuelRef.current) {
       setTimeout(() => {
         refuelRef.current?.blur()
       }, 0)
     }
-  }, [initialData])
+  }, [initialData, form])
 
   const handleFormSubmit = (values: FuelRecordFormValues) => {
     // datetime-local の値（ローカルタイムゾーン）を UTC に変換

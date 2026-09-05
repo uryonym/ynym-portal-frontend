@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { TodoList } from '@/components/TodoList'
 import { TodoDialog } from '@/components/TodoDialog'
-import { Toaster } from '@/components/ui/sonner'
 import { useTodos } from '@/hooks/useTodos'
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
@@ -66,8 +65,6 @@ export default function TasksPage() {
           onDelete={deleteTodo}
           isLoading={isLoading}
         />
-
-        <Toaster />
       </>
     </ProtectedRoute>
   )

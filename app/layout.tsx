@@ -4,10 +4,18 @@ import { AuthProvider } from '@/providers/AuthProvider'
 import { Toaster } from '@/components/ui/sonner'
 
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Noto_Sans_JP } from 'next/font/google'
 import { cn } from '@/lib/utils'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  variable: '--font-noto-sans-jp',
+})
 
 export const metadata: Metadata = {
   title: 'Ynym Portal',
@@ -27,8 +35,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja" className={cn('font-sans', inter.variable)}>
-      <body className="font-sans">
+    <html
+      lang="ja"
+      className={cn('font-sans', inter.variable, notoSansJP.variable)}
+    >
+      <body className="font-sans antialiased">
         <AuthProvider>
           {children}
           <Toaster />

@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react'
 import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
 import { Trash2 } from 'lucide-react'
+import { toDatetimeLocalValue, toUtcIsoString } from '@/lib/date'
 
 import {
   FuelRecord,
@@ -26,6 +26,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { FUEL_TYPES } from '@/lib/constants'
 
 interface FuelRecordFormProps {
   initialData?: FuelRecord | null
@@ -46,19 +54,12 @@ export function FuelRecordForm({
 }: FuelRecordFormProps) {
   const refuelRef = useRef<HTMLInputElement>(null)
 
-  // バックエンドから返される UTC 文字列を JST datetime-local 用に変換
-  const formatDatetimeForInput = (datetimeStr?: string | null) => {
-    if (!datetimeStr) return ''
-    const date = new Date(datetimeStr)
-    return format(date, "yyyy-MM-dd'T'HH:mm")
-  }
-
   const form = useForm<FuelRecordFormValues>({
     resolver: zodResolver(
       fuelRecordFormSchema,
     ) as Resolver<FuelRecordFormValues>,
     defaultValues: {
-      refuel_datetime: formatDatetimeForInput(initialData?.refuel_datetime),
+      refuel_datetime: toDatetimeLocalValue(initialData?.refuel_datetime),
       total_mileage: initialData?.total_mileage?.toString() ?? '',
       fuel_type: initialData?.fuel_type ?? '',
       unit_price: initialData?.unit_price?.toString() ?? '',
@@ -71,7 +72,7 @@ export function FuelRecordForm({
   // initialData が変わった場合（新規追加・別アイテムの編集など）にフォームをリセット
   useEffect(() => {
     form.reset({
-      refuel_datetime: formatDatetimeForInput(initialData?.refuel_datetime),
+      refuel_datetime: toDatetimeLocalValue(initialData?.refuel_datetime),
       total_mileage: initialData?.total_mileage?.toString() ?? '',
       fuel_type: initialData?.fuel_type ?? '',
       unit_price: initialData?.unit_price?.toString() ?? '',
@@ -88,13 +89,9 @@ export function FuelRecordForm({
   }, [initialData, form])
 
   const handleFormSubmit = (values: FuelRecordFormValues) => {
-    // datetime-local の値（ローカルタイムゾーン）を UTC に変換
-    const localDate = new Date(values.refuel_datetime)
-    const utcDatetime = localDate.toISOString()
-
     const data = {
       vehicle_id: vehicleId,
-      refuel_datetime: utcDatetime,
+      refuel_datetime: toUtcIsoString(values.refuel_datetime),
       total_mileage: parseInt(values.total_mileage, 10),
       fuel_type: values.fuel_type.trim(),
       unit_price: parseInt(values.unit_price, 10),
@@ -171,19 +168,24 @@ export function FuelRecordForm({
                 <FormLabel>
                   燃料種別 <span className="text-red-500">*</span>
                 </FormLabel>
-                <FormControl>
-                  <select
-                    {...field}
-                    disabled={isLoading}
-                    className="h-10 w-full px-3 border border-gray-300 rounded-md text-sm bg-white"
-                  >
-                    <option value="">選択してください</option>
-                    <option value="レギュラー">レギュラー</option>
-                    <option value="ハイオク">ハイオク</option>
-                    <option value="軽油">軽油</option>
-                    <option value="電気">電気</option>
-                  </select>
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={isLoading}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-10 w-full bg-white">
+                      <SelectValue placeholder="選択してください" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {FUEL_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

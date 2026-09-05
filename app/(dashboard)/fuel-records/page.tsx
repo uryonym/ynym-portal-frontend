@@ -12,6 +12,13 @@ import {
   FuelRecord,
 } from '@/lib/types/fuel-record'
 import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 export default function FuelRecordsPage() {
   const { vehicles, isLoading: vehiclesLoading } = useVehicles()
@@ -88,17 +95,21 @@ export default function FuelRecordsPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   対象車両を選択
                 </label>
-                <select
+                <Select
                   value={activeVehicleId || ''}
-                  onChange={(e) => setSelectedVehicleId(e.target.value)}
-                  className="w-full h-10 px-3 border border-gray-300 rounded-md text-sm"
+                  onValueChange={(val) => setSelectedVehicleId(val)}
                 >
-                  {vehicles.map((vehicle) => (
-                    <option key={vehicle.id} value={vehicle.id}>
-                      {vehicle.name} ({vehicle.maker} {vehicle.model})
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger className="w-full h-10 bg-white">
+                    <SelectValue placeholder="車両を選択してください" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {vehicles.map((vehicle) => (
+                      <SelectItem key={vehicle.id} value={vehicle.id}>
+                        {vehicle.name} ({vehicle.maker} {vehicle.model})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {activeVehicleId && (

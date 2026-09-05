@@ -1,4 +1,19 @@
 import { z } from 'zod'
+import {
+  FUEL_TYPES,
+  VEHICLE_YEAR_MIN,
+  VEHICLE_YEAR_MAX,
+} from '@/lib/constants'
+
+// 0以上の整数を検証するヘルパー
+const nonNegativeIntegerSchema = (emptyMessage: string) =>
+  z
+    .string()
+    .min(1, emptyMessage)
+    .refine((val) => {
+      const num = Number(val)
+      return !isNaN(num) && Number.isInteger(num) && num >= 0
+    }, '0以上の整数を入力してください')
 
 export const todoFormSchema = z.object({
   title: z
@@ -21,8 +36,13 @@ export const vehicleFormSchema = z.object({
     .min(1, '年式を入力してください')
     .refine((val) => {
       const num = Number(val)
-      return !isNaN(num) && Number.isInteger(num) && num >= 1900 && num <= 2100
-    }, '1900〜2100の整数で入力してください'),
+      return (
+        !isNaN(num) &&
+        Number.isInteger(num) &&
+        num >= VEHICLE_YEAR_MIN &&
+        num <= VEHICLE_YEAR_MAX
+      )
+    }, `${VEHICLE_YEAR_MIN}〜${VEHICLE_YEAR_MAX}の整数で入力してください`),
   number: z.string().trim().min(1, 'ナンバープレートを入力してください'),
   tank_capacity: z
     .string()
@@ -38,28 +58,16 @@ export type VehicleFormValues = z.infer<typeof vehicleFormSchema>
 
 export const fuelRecordFormSchema = z.object({
   refuel_datetime: z.string().min(1, '給油日時を入力してください'),
-  total_mileage: z
+  total_mileage: nonNegativeIntegerSchema('走行距離を入力してください'),
+  fuel_type: z
     .string()
-    .min(1, '走行距離を入力してください')
-    .refine((val) => {
-      const num = Number(val)
-      return !isNaN(num) && Number.isInteger(num) && num >= 0
-    }, '0以上の整数を入力してください'),
-  fuel_type: z.string().min(1, '燃料種別を選択してください'),
-  unit_price: z
-    .string()
-    .min(1, '単価を入力してください')
-    .refine((val) => {
-      const num = Number(val)
-      return !isNaN(num) && Number.isInteger(num) && num >= 0
-    }, '0以上の整数を入力してください'),
-  total_cost: z
-    .string()
-    .min(1, '合計金額を入力してください')
-    .refine((val) => {
-      const num = Number(val)
-      return !isNaN(num) && Number.isInteger(num) && num >= 0
-    }, '0以上の整数を入力してください'),
+    .min(1, '燃料種別を選択してください')
+    .refine(
+      (val) => (FUEL_TYPES as readonly string[]).includes(val),
+      '有効な燃料種別を選択してください',
+    ),
+  unit_price: nonNegativeIntegerSchema('単価を入力してください'),
+  total_cost: nonNegativeIntegerSchema('合計金額を入力してください'),
   is_full_tank: z.boolean().default(false),
   gas_station_name: z.string().default(''),
 })

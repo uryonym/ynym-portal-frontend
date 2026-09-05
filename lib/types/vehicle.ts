@@ -1,3 +1,5 @@
+import { ApiResponse } from './api'
+
 export interface Vehicle {
   id: string
   user_id: string
@@ -12,15 +14,8 @@ export interface Vehicle {
   updated_at: string
 }
 
-export interface VehiclesResponse {
-  data: Vehicle[]
-  message: string
-}
-
-export interface VehicleResponse {
-  data: Vehicle
-  message: string
-}
+export type VehiclesResponse = ApiResponse<Vehicle[]>
+export type VehicleResponse = ApiResponse<Vehicle>
 
 export interface CreateVehicleInput {
   name: string

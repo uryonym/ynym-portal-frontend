@@ -3,8 +3,7 @@
 import { FuelRecord } from '@/lib/types/fuel-record'
 import { Edit } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
+import { formatDisplayDateTime } from '@/lib/date'
 
 interface FuelRecordItemProps {
   record: FuelRecord
@@ -12,11 +11,7 @@ interface FuelRecordItemProps {
 }
 
 export function FuelRecordItem({ record, onEdit }: FuelRecordItemProps) {
-  // バックエンドから返される UTC 文字列を JST に変換して表示
-  // new Date() は "2024-01-15T05:30:00Z" を自動的にブラウザのローカルタイムゾーン（JST）に変換
-  const refuelDate = format(new Date(record.refuel_datetime), 'M月d日 HH:mm', {
-    locale: ja,
-  })
+  const refuelDate = formatDisplayDateTime(record.refuel_datetime)
 
   return (
     <div className="flex items-start justify-between gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">

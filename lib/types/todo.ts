@@ -1,3 +1,5 @@
+import { ApiResponse } from './api'
+
 export interface Todo {
   id: string
   user_id: string
@@ -11,15 +13,8 @@ export interface Todo {
   updated_at: string
 }
 
-export interface TodosResponse {
-  data: Todo[]
-  message: string
-}
-
-export interface TodoResponse {
-  data: Todo
-  message: string
-}
+export type TodosResponse = ApiResponse<Todo[]>
+export type TodoResponse = ApiResponse<Todo>
 
 export interface CreateTodoInput {
   title: string

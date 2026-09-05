@@ -3,9 +3,9 @@
 import { useEffect, useRef } from 'react'
 import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format, parse } from 'date-fns'
-import { ja } from 'date-fns/locale'
+import { format } from 'date-fns'
 import { Trash2, Calendar as CalendarIcon, X } from 'lucide-react'
+import { parseDateString, formatDisplayDate } from '@/lib/date'
 
 import { Todo, CreateTodoInput, UpdateTodoInput } from '@/lib/types/todo'
 import { todoFormSchema, type TodoFormValues } from '@/lib/validations/schemas'
@@ -143,10 +143,8 @@ export function TodoForm({
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {field.value
-                        ? format(
-                            parse(field.value, 'yyyy-MM-dd', new Date()),
-                            'M月d日',
-                            { locale: ja },
+                        ? formatDisplayDate(
+                            parseDateString(field.value, 'yyyy-MM-dd'),
                           )
                         : '期日を選択'}
                     </Button>
@@ -158,14 +156,13 @@ export function TodoForm({
                       mode="single"
                       selected={
                         field.value
-                          ? parse(field.value, 'yyyy-MM-dd', new Date())
+                          ? parseDateString(field.value, 'yyyy-MM-dd')
                           : undefined
                       }
                       onSelect={(date) => {
                         field.onChange(date ? format(date, 'yyyy-MM-dd') : '')
                       }}
                       disabled={isLoading}
-                      locale={ja}
                     />
                     {field.value && (
                       <div className="border-t p-2">

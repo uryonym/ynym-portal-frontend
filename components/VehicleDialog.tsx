@@ -30,16 +30,7 @@ export function VehicleDialog({
   onDelete,
   isLoading = false,
 }: VehicleDialogProps) {
-  const isEditMode = !!initialData
-  const title = isEditMode ? '車両を編集' : '新しい車両を登録'
-
-  const handleSubmit = (data: CreateVehicleInput | UpdateVehicleInput) => {
-    onSubmit(data)
-  }
-
-  const handleCancel = () => {
-    onOpenChange(false)
-  }
+  const title = initialData ? '車両を編集' : '新しい車両を登録'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -50,8 +41,8 @@ export function VehicleDialog({
 
         <VehicleForm
           initialData={initialData}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
+          onSubmit={onSubmit}
+          onCancel={() => onOpenChange(false)}
           onDelete={onDelete}
           isLoading={isLoading}
         />

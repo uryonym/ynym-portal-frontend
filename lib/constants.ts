@@ -11,3 +11,10 @@ export const LOGOUT_URL = `${API_BASE_URL}/api/auth/logout`
 export const APP_NAME = 'ynym portal'
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
+// ---  Domain constants ---
+export const FUEL_TYPES = ['レギュラー', 'ハイオク', '軽油', '電気'] as const
+export type FuelType = (typeof FUEL_TYPES)[number]
+
+export const VEHICLE_YEAR_MIN = 1900
+export const VEHICLE_YEAR_MAX = 2100

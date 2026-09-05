@@ -1,3 +1,5 @@
+import { ApiResponse } from './api'
+
 export interface FuelRecord {
   id: string
   vehicle_id: string
@@ -16,15 +18,8 @@ export interface FuelRecord {
   updated_at: string
 }
 
-export interface FuelRecordsResponse {
-  data: FuelRecord[]
-  message: string
-}
-
-export interface FuelRecordResponse {
-  data: FuelRecord
-  message: string
-}
+export type FuelRecordsResponse = ApiResponse<FuelRecord[]>
+export type FuelRecordResponse = ApiResponse<FuelRecord>
 
 export interface CreateFuelRecordInput {
   vehicle_id: string

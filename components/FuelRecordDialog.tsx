@@ -32,18 +32,7 @@ export function FuelRecordDialog({
   onDelete,
   isLoading = false,
 }: FuelRecordDialogProps) {
-  const isEditMode = !!initialData
-  const title = isEditMode ? '記録を編集' : '新しい記録を作成'
-
-  const handleSubmit = (
-    data: CreateFuelRecordInput | UpdateFuelRecordInput,
-  ) => {
-    onSubmit(data)
-  }
-
-  const handleCancel = () => {
-    onOpenChange(false)
-  }
+  const title = initialData ? '記録を編集' : '新しい記録を作成'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -55,8 +44,8 @@ export function FuelRecordDialog({
         <FuelRecordForm
           initialData={initialData}
           vehicleId={vehicleId}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
+          onSubmit={onSubmit}
+          onCancel={() => onOpenChange(false)}
           onDelete={onDelete}
           isLoading={isLoading}
         />

@@ -4,8 +4,7 @@ import { Todo } from '@/lib/types/todo'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Pencil, Calendar } from 'lucide-react'
-import { format } from 'date-fns'
-import { ja } from 'date-fns/locale'
+import { formatDisplayDate } from '@/lib/date'
 
 interface TodoItemProps {
   todo: Todo
@@ -14,14 +13,6 @@ interface TodoItemProps {
 }
 
 export function TodoItem({ todo, onToggleComplete, onEdit }: TodoItemProps) {
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return null
-    try {
-      return format(new Date(dateString), 'MM月dd日', { locale: ja })
-    } catch {
-      return dateString
-    }
-  }
 
   return (
     <div className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
@@ -50,7 +41,7 @@ export function TodoItem({ todo, onToggleComplete, onEdit }: TodoItemProps) {
         {todo.due_date && (
           <div className="flex items-center gap-1 mt-2 text-sm text-gray-500">
             <Calendar className="h-4 w-4" />
-            <span>{formatDate(todo.due_date)}</span>
+            <span>{formatDisplayDate(todo.due_date, 'MM月dd日')}</span>
           </div>
         )}
       </div>

@@ -26,16 +26,7 @@ export function TodoDialog({
   onDelete,
   isLoading = false,
 }: TodoDialogProps) {
-  const isEditMode = !!initialData
-  const title = isEditMode ? 'タスクを編集' : '新しいタスクを作成'
-
-  const handleSubmit = (data: CreateTodoInput | UpdateTodoInput) => {
-    onSubmit(data)
-  }
-
-  const handleCancel = () => {
-    onOpenChange(false)
-  }
+  const title = initialData ? 'タスクを編集' : '新しいタスクを作成'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,8 +37,8 @@ export function TodoDialog({
 
         <TodoForm
           initialData={initialData}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
+          onSubmit={onSubmit}
+          onCancel={() => onOpenChange(false)}
           onDelete={onDelete}
           isLoading={isLoading}
         />
